@@ -7,7 +7,7 @@ class AvlNode {
     /*
     * the value of the node
      */
-    int value;
+    private int value;
     /*
     * the left child of the node .
      */
@@ -21,9 +21,9 @@ class AvlNode {
      */
     private AvlNode parent;
     /*
-    * the height of the node from the fares desendence.
+    * the depth of the node from the fares desendence.
      */
-    private int height=0;
+    private int depth =0;
     /*
     * number of decendens of the node.
      */
@@ -32,22 +32,28 @@ class AvlNode {
     AvlNode(){
 
     }
+    /*
+     * root constractor.
+     */
+    AvlNode(int value){
+        this.value=value;
+    }
     AvlNode(AvlNode parent,int value){
         this.value=value;
         this.parent=parent;
-        parent.addChild();
+        parent.addChildCount();
+        depth=parent.depth+1;
     }
 
     /*
-    * add child to the currnt node count and all of his fathers.
+    * add child to the currant node count and all of his fathers.
      */
-    void addChild(){
+    private void addChildCount(){
         numberOfDecendens++;
         if (parent!=null){
-            parent.addChild();
+            parent.addChildCount();
         }
     }
-
     /*
     * get the left child of the current node.
      */
@@ -69,10 +75,10 @@ class AvlNode {
         return parent;
     }
     /*
-    * get the current height of the node.
+    * get the current depth of the node.
      */
-    int getHeight() {
-        return height;
+    int getDepth() {
+        return depth;
     }
 
     int getNumberOfDecendens ()
@@ -83,4 +89,11 @@ class AvlNode {
     int getValue ()
     {return value;}
 
+    void setRightChild(AvlNode rightChild) {
+        this.rightChild = rightChild;
+    }
+
+    void setLeftChild(AvlNode leftChild) {
+        this.leftChild = leftChild;
+    }
 }

@@ -1,4 +1,5 @@
 package oop.ex4.data_structures;
+
 public class AvlTree {
 
 
@@ -8,8 +9,7 @@ public class AvlTree {
     /**
      * A default constructor.
      */
-    public AvlTree()
-    {
+    public AvlTree() {
 
     }
 
@@ -17,81 +17,87 @@ public class AvlTree {
     /**
      * A constructor that builds the tree by adding the elements in the input array one-by-one If the same
      * values appears twice (or more) in the list, it is ignored.
+     *
      * @param data - values to add to tree
      */
-    public AvlTree(int [] data)
-    {
+    public AvlTree(int[] data) {
 
 
     }
 
     /**
      * Add a new node with key newValue into the tree.
+     *
      * @param newValue - new value to add to the tree.
      * @return - false if newValue already exist in the tree
      */
-    public boolean add(int newValue)
-    {
+    public boolean add(int newValue) {
 
-        if (smallestSon.getValue()== newValue) // in our smallest value is the requested value
-            return false;
-
-        if (checkNode.getLeftChild()) {
-            AvlNode checkNode = this.root;
-            while (checkNode != null) {
-                if (checkNode.getValue() == newVal) {
-                    return false;
-                }
-
-                if (checkNode.getValue() > newVal)  // if current node value is bigger the given one
-                {
-                    checkNode = checkNode.getLeftChild();
-                } else {
-                    checkNode = checkNode.getRightChild();
-                }
-            }
-
+        if (smallestSon.getValue() >= newValue) {
+            return setNextPath(smallestSon, newValue);//TODO blance tree and update  higte
         }
+        AvlNode lastFather=fatherOfElement(newValue);
+        return setNextPath(lastFather,newValue);
     }
+
+    private boolean setNextPath(AvlNode father, int newValue) {
+        if (getNextPath(father, newValue) != null) {
+            return false;
+        }
+        AvlNode son = new AvlNode(father,newValue);
+        if (father.getValue() < newValue) {
+            father.setRightChild(son);
+        } else {
+            father.setLeftChild(son);
+        }
+        return true;
+    }
+
+    private AvlNode getNextPath(AvlNode father, int value) {
+        if (value > father.getValue())  // if current node value is bigger the given one
+        {
+            return father.getRightChild();
+        }
+        if (value < father.getValue()) {
+            return father.getLeftChild();
+        }
+        return father;
+
+    }
+
 
     /*
      * this function searches the tree for a certain given value, and returns the node that contains it.
      * @param - searchVal - the value to be searched.
      * @return - the node containing the value, null if value is not in the tree.
      */
-    private AvlNode elementFInder(int searchVal)
-    {
-        if (smallestSon.getValue()== searchVal) // in our smallest value is the requested value
-            return smallestSon;
+    private AvlNode elementFinder(int searchVal) {
+        return getNextPath(fatherOfElement(searchVal),searchVal);
 
-        AvlNode checkNode = this.root;
-        while (checkNode!=null)
-        {
-            if (checkNode.getValue()==searchVal)
-            {return checkNode;}
-
-            if (checkNode.getValue()> searchVal)  // if current node value is bigger the given one
-            {checkNode = checkNode.getLeftChild();}
-
-            else
-            {checkNode= checkNode.getRightChild();}
-        }
-        return null;
     }
 
+    private AvlNode fatherOfElement(int searchVal){
+        AvlNode nextPath=root;
+        AvlNode lastPath=root;
+        while (nextPath!=null && nextPath.getValue()!=searchVal) {
+            lastPath=nextPath;
+            nextPath = getNextPath(root, searchVal);
+        }
+        return lastPath;
+    }
 
 
     /**
      * Does tree contain a given input value.
+     *
      * @param searchVal - value to search for
      * @return if val is found in the tree, return the depth of its node (where 0 is the root).
      * Otherwise -- return -1.
      */
-    public int contains(int searchVal)
-    {
-        AvlNode requstedNode = elementFInder(searchVal);
-        if (requstedNode!= null)
-            return requstedNode.getHeight();
+    public int contains(int searchVal) {
+        AvlNode requstedNode = elementFinder(searchVal);
+        if (requstedNode != null)
+            return requstedNode.getDepth();
         return -1;
 
     }
@@ -100,11 +106,9 @@ public class AvlTree {
     /**
      * @return the number of nodes in the tree.
      */
-    public int size()
-    {
+    public int size() {
         return this.root.getNumberOfDecendens();
     }
-
 
 
 }
