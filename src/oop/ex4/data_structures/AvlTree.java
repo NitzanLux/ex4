@@ -2,7 +2,7 @@ package oop.ex4.data_structures;
 public class AvlTree {
 
 
-    private AvlNode smallestSonValue;
+    private AvlNode smallestSon;
     private AvlNode root;
 
     /**
@@ -33,7 +33,52 @@ public class AvlTree {
     public boolean add(int newValue)
     {
 
+        if (smallestSon.getValue()== newValue) // in our smallest value is the requested value
+            return false;
+
+        if (checkNode.getLeftChild()) {
+            AvlNode checkNode = this.root;
+            while (checkNode != null) {
+                if (checkNode.getValue() == newVal) {
+                    return false;
+                }
+
+                if (checkNode.getValue() > newVal)  // if current node value is bigger the given one
+                {
+                    checkNode = checkNode.getLeftChild();
+                } else {
+                    checkNode = checkNode.getRightChild();
+                }
+            }
+
+        }
     }
+
+    /*
+     * this function searches the tree for a certain given value, and returns the node that contains it.
+     * @param - searchVal - the value to be searched.
+     * @return - the node containing the value, null if value is not in the tree.
+     */
+    private AvlNode elementFInder(int searchVal)
+    {
+        if (smallestSon.getValue()== searchVal) // in our smallest value is the requested value
+            return smallestSon;
+
+        AvlNode checkNode = this.root;
+        while (checkNode!=null)
+        {
+            if (checkNode.getValue()==searchVal)
+            {return checkNode;}
+
+            if (checkNode.getValue()> searchVal)  // if current node value is bigger the given one
+            {checkNode = checkNode.getLeftChild();}
+
+            else
+            {checkNode= checkNode.getRightChild();}
+        }
+        return null;
+    }
+
 
 
     /**
@@ -44,7 +89,10 @@ public class AvlTree {
      */
     public int contains(int searchVal)
     {
-
+        AvlNode requstedNode = elementFInder(searchVal);
+        if (requstedNode!= null)
+            return requstedNode.getHeight();
+        return -1;
 
     }
 
@@ -54,8 +102,7 @@ public class AvlTree {
      */
     public int size()
     {
-        return this.
-
+        return this.root.getNumberOfDecendens();
     }
 
 

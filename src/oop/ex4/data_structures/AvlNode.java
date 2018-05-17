@@ -75,4 +75,12 @@ class AvlNode {
         return height;
     }
 
+    int getNumberOfDecendens ()
+    {
+        return numberOfDecendens;
+    }
+
+    int getValue ()
+    {return value;}
+
 }
