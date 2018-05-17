@@ -40,6 +40,16 @@ public class AvlTree {
         return setNextPath(lastFather,newValue);
     }
 
+
+    /*
+     * this function receives an appropriate father (using getNextPath method),
+      * and a value to insert to the tree, and puts the value
+     * in it's right place in relation to the father (right/left son). .
+     * @param father - the suitable father
+     * @param newValue - the value to be added
+     * @return true if value was added, and false if it already existed.
+     */
+
     private boolean setNextPath(AvlNode father, int newValue) {
         if (getNextPath(father, newValue) != null) {
             return false;
