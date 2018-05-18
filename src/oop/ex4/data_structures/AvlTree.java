@@ -1,10 +1,15 @@
 package oop.ex4.data_structures;
 
+/**
+ * This class is the complete and tested implementation of an AVL-tree.
+ *
+ * @author itamar108 nlux.
+ */
 public class AvlTree {
-
 
     private AvlNode smallestSon;
     private AvlNode root;
+    private int treeSize = 0;
 
     /**
      * A default constructor.
@@ -36,30 +41,30 @@ public class AvlTree {
         if (smallestSon.getValue() >= newValue) {
             return setNextPath(smallestSon, newValue);//TODO blance tree and update  higte
         }
-        AvlNode lastFather=fatherOfElement(newValue);
-        return setNextPath(lastFather,newValue);
+        AvlNode lastFather = fatherOfElement(newValue);
+        return setNextPath(lastFather, newValue);
     }
 
 
     /*
      * this function receives an appropriate father (using getNextPath method),
-      * and a value to insert to the tree, and puts the value
+     * and a value to insert to the tree, and puts the value
      * in it's right place in relation to the father (right/left son). .
      * @param father - the suitable father
      * @param newValue - the value to be added
      * @return true if value was added, and false if it already existed.
      */
-
     private boolean setNextPath(AvlNode father, int newValue) {
         if (getNextPath(father, newValue) != null) {
             return false;
         }
-        AvlNode son = new AvlNode(father,newValue);
+        AvlNode son = new AvlNode(father, newValue);
         if (father.getValue() < newValue) {
             father.setRightChild(son);
         } else {
             father.setLeftChild(son);
         }
+        treeSize++;
         return true;
     }
 
@@ -82,15 +87,15 @@ public class AvlTree {
      * @return - the node containing the value, null if value is not in the tree.
      */
     private AvlNode elementFinder(int searchVal) {
-        return getNextPath(fatherOfElement(searchVal),searchVal);
+        return getNextPath(fatherOfElement(searchVal), searchVal);
 
     }
 
-    private AvlNode fatherOfElement(int searchVal){
-        AvlNode nextPath=root;
-        AvlNode lastPath=root;
-        while (nextPath!=null && nextPath.getValue()!=searchVal) {
-            lastPath=nextPath;
+    private AvlNode fatherOfElement(int searchVal) {
+        AvlNode nextPath = root;
+        AvlNode lastPath = root;
+        while (nextPath != null && nextPath.getValue() != searchVal) {
+            lastPath = nextPath;
             nextPath = getNextPath(root, searchVal);
         }
         return lastPath;
@@ -112,12 +117,79 @@ public class AvlTree {
 
     }
 
+    /**
+     * Remove a node from the tree, if it exists.
+     *
+     * @param toDelete - value to delete.
+     * @return true iff toDelete found and deleted.
+     */
+    public boolean delete(int toDelete) {
+        if (toDelete == smallestSon.getValue()) {
+            smallestSon = smallestSon.getParent();
+            smallestSon.setLeftChild(null);
+            treeSize--;
+            return true;
+        }
+        AvlNode fatherToDelete = fatherOfElement(toDelete);
+        AvlNode nodeToDelete = getNextPath(fatherToDelete, toDelete);
+        if (nodeToDelete != null) {
+            if (nodeToDelete.getLeftChild() != null || nodeToDelete.getRightChild() != null) {
+                if (nodeToDelete.getLeftChild() == null ^ nodeToDelete.getRightChild() == null) {
+                    replaceOnlyChild(nodeToDelete,nodeToDelete.getChild());
+                } else {
+                    AvlNode replaceNode = findSucsseor(nodeToDelete);
+                    if (replaceNode==null){
+                        return false;
+                    }
+                    replaceOnlyChild(nodeToDelete,replaceNode);
+                    replaceNode.setChild(replaceNode.getRightChild());
+                    replaceNode.setChild(replaceNode.getLeftChild());
+                }
+            } else {
+                nodeToDelete.getParent().removeChild(nodeToDelete);
+            }
+            treeSize--;
+            return true;
+        }
+        return false;
+    }
+    private void replaceOnlyChild(AvlNode nodeToReplace,AvlNode replaceNode){
+        replaceNode.getParent().removeChild(replaceNode);//TODO rais exeption;
+        nodeToReplace.getParent().setChild(replaceNode);//TODO should we move it to the other class??
+
+    }
+    private AvlNode findSucsseor(AvlNode baseNode) {
+        AvlNode succsseor = minRight(baseNode);
+        if (succsseor!=null){
+            return succsseor;
+        }
+        succsseor=baseNode;
+        while (succsseor.getParent()!=null){
+            succsseor=succsseor.getParent();
+            if (succsseor.getValue()>baseNode.getValue()){
+                return succsseor;
+            }
+        }
+        return null;
+    }
+
+    private AvlNode minRight(AvlNode baseNode) {
+        AvlNode minRightNode = baseNode.getRightChild();
+        if (minRightNode == null) {
+            return baseNode;
+        }
+        while (minRightNode.getLeftChild() != null) {
+            minRightNode = minRightNode.getLeftChild();
+        }
+        return minRightNode;
+    }
+
 
     /**
      * @return the number of nodes in the tree.
      */
     public int size() {
-        return this.root.getNumberOfDecendens();
+        return treeSize;
     }
 
 
