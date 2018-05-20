@@ -192,5 +192,27 @@ public class AvlTree {
         return treeSize;
     }
 
+    /**
+     * A method that calculates the minimum numbers of nodes in an AVL tree of height h.
+     * @param h - height of the tree (a non-negative number).
+     * @return minimum number of nodes of height h.
+     */
+    public static int findMinNodes(int h){
+        double sqrt5=Math.sqrt(5);
+        int fibonacciHplusOne =(int) ((1/sqrt5)*(Math.pow((1+sqrt5)/2,h+3)-Math.pow((1-sqrt5)/2,h+3)));
+        return fibonacciHplusOne-1;
+    }//TODO added new method. refactor names
+
+    /**
+     * A method that calculates the maximum number of nodes in an AVL tree of height h,
+     * @param h - height of the tree (a non-negative number).
+     * @return maximum number of nodes of height h
+     */
+    public static int findMaxNodes(int h){
+        return (int)(Math.pow(2,h)-1);
+    }//TODO added new method
 
 }
+
+
+
