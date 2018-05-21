@@ -4,9 +4,8 @@ import java.util.Iterator;
 
 abstract class BinaryTree {
 
-
-    private BinaryTreeNode smallestSon;
-    private BinaryTreeNode root;
+    BinaryTreeNode smallestNode;
+    BinaryTreeNode root;
     private int treeSize = 0;
 
 
@@ -28,10 +27,11 @@ abstract class BinaryTree {
      * @return - false if newValue already exist in the tree
      */
     public boolean add(int newValue) {
-
-        if (smallestSon.getValue() >= newValue) {
-            return setNextPath(smallestSon, newValue);//TODO blance tree and update  higte
+        System.out.println(smallestNode.getValue());//TODO gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg
+        if (smallestNode!=null && smallestNode.getValue() > newValue) {
+            return setNextPath(smallestNode, newValue);//TODO blance tree and update  higte
         }
+
         BinaryTreeNode lastFather = fatherOfElement(newValue);
         return setNextPath(lastFather, newValue);
     }
@@ -52,8 +52,10 @@ abstract class BinaryTree {
         BinaryTreeNode son = new BinaryTreeNode(father, newValue);
         if (father.getValue() < newValue) {
             father.setRightChild(son);
-        } else {
+        } else if (father.getValue()>newValue){
             father.setLeftChild(son);
+        }else {
+            return false;
         }
         treeSize++;
         return true;
@@ -123,9 +125,9 @@ abstract class BinaryTree {
      * @return true iff toDelete found and deleted.
      */
     public boolean delete(int toDelete) {
-        if (toDelete == smallestSon.getValue()) {
-            smallestSon = smallestSon.getParent();
-            smallestSon.setLeftChild(null);
+        if (toDelete == smallestNode.getValue()) {
+            smallestNode = smallestNode.getParent();
+            smallestNode.setLeftChild(null);
             treeSize--;
             return true;
         }
@@ -198,7 +200,7 @@ abstract class BinaryTree {
     }
     public java.util.Iterator<java.lang.Integer> iterator(){
         Iterator<Integer> iterator=new Iterator<Integer>() {
-            private BinaryTreeNode currentNode=smallestSon;
+            private BinaryTreeNode currentNode=smallestNode;
             @Override
             public boolean hasNext() {
                 if (findSuccessor(currentNode)!=null){

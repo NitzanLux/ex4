@@ -1,5 +1,9 @@
 package oop.ex4.data_structures;
 
+import java.util.Iterator;
+
+import static oop.ex4.data_structures.BTreePrinter.printNode;
+
 /**
  * This class is the complete and tested implementation of an AVL-tree.
  *
@@ -7,8 +11,6 @@ package oop.ex4.data_structures;
  */
 public class AvlTree extends BinaryTree{
 
-    private BinaryTreeNode root;
-    private BinaryTreeNode smallestSon;
     private int treeSize = 0;
     /**
      * A default constructor.
@@ -26,16 +28,25 @@ public class AvlTree extends BinaryTree{
         for (int value:data) {
             if (root==null){
                 root=new BinaryTreeNode(value);
-            }else {
-            add(value);}
+                smallestNode = root;
+            }
+            else
+            {
+                add(value);
+            }
+            printNode(root);//TODO itamarrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr108
         }
     }
-
+//    public AvlTree(AvlTree avlTree){
+//        smallestNode
+//    }
     @Override
     public boolean add(int newValue) {
         if (super.add(newValue)){
             BinaryTreeNode currentNode=elementFinder(newValue);
+            System.out.println("yesaso");//TODO tyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
             balanceVoilationChecker(currentNode);
+            System.out.println("yeso");//TODO yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
             return true;
         }
         return false;
@@ -58,7 +69,9 @@ public class AvlTree extends BinaryTree{
     private void balanceVoilationChecker(BinaryTreeNode updatedNode){
         BinaryTreeNode currentNode=updatedNode;
         do {
+            System.out.println("yes");//TODO tyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
             balanceTree(currentNode);
+            System.out.println("yesitamar108");//TODO tyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
             currentNode = currentNode.getParent();
         }while (currentNode.getParent()!=null);
 
@@ -82,6 +95,7 @@ public class AvlTree extends BinaryTree{
     private void rotate(BinaryTreeNode child, BinaryTreeNode father){
         replaceOnlyChild(father,child);
         BinaryTreeNode childOfChildToFather;
+        System.out.println("yes");//TODO tyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
         if (father.getValue()>child.getValue()){
             childOfChildToFather=child.getRightChild();
         }else {
@@ -100,6 +114,9 @@ public class AvlTree extends BinaryTree{
     private int balanceFactor(BinaryTreeNode currentNode){
         int rightHigte=-1;
         int leftHight =-1;
+        if (currentNode==null){
+            return -1;
+        }
         if (currentNode.getLeftChild()!=null){
             leftHight=currentNode.getLeftChild().getBiggestDistanceToLeaf();
         }
@@ -151,7 +168,10 @@ public class AvlTree extends BinaryTree{
         return (int)(Math.pow(2,h)-1);
     }//TODO added new method
 
-
+    @Override
+    public Iterator<Integer> iterator() {
+        return super.iterator();
+    }
 }
 
 
