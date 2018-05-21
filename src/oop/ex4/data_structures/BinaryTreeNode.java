@@ -3,7 +3,7 @@ package oop.ex4.data_structures;
 /*
 * this class represent a node which hold a node for the avl tree.
  */
-class AvlNode {
+class BinaryTreeNode {
     /*
     * the value of the node
      */
@@ -11,31 +11,31 @@ class AvlNode {
     /*
     * the left child of the node .
      */
-    private AvlNode leftChild;
+    BinaryTreeNode leftChild;
     /*
    * the right child of the node .
     */
-    private AvlNode rightChild;
+    BinaryTreeNode rightChild;
     /*
     * the parent of the node.
      */
-    private AvlNode parent;
+    BinaryTreeNode parent;
 
     /*
     *TODO documentation
      */
     private int biggestDistanceToLeaf=0;
-    AvlNode(){
+    BinaryTreeNode(){
 
     }
     /*
      * root constructor.
      */
-    AvlNode(int value){
+    BinaryTreeNode(int value){
         this.value=value;
     }
     //TODO expleine its a leaf
-    AvlNode(AvlNode parent,int value){
+    BinaryTreeNode(BinaryTreeNode parent, int value){
         this.value=value;
         this.parent=parent;
         updateAncestorsDistanceToLeaf();
@@ -74,21 +74,21 @@ class AvlNode {
     /*
         * get the left child of the current node.
          */
-    AvlNode getLeftChild() {
+    BinaryTreeNode getLeftChild() {
         return leftChild;
     }
 
     /*
     * get the right child of the current node.
      */
-    AvlNode getRightChild() {
+    BinaryTreeNode getRightChild() {
         return rightChild;
     }
 
     /*
     *   get the parent of the node
      */
-    AvlNode getParent() {
+    BinaryTreeNode getParent() {
 
         return parent;
     }
@@ -97,21 +97,21 @@ class AvlNode {
         return value;
     }
 
-    void setRightChild(AvlNode rightChild) {
+    void setRightChild(BinaryTreeNode rightChild) {
         this.rightChild = rightChild;
     }
 
-    void setLeftChild(AvlNode leftChild) {
+    void setLeftChild(BinaryTreeNode leftChild) {
         this.leftChild = leftChild;
     }
-    AvlNode getChild(){//TODO genric child
+    BinaryTreeNode getChild(){//TODO genric child
         if (leftChild!=null){
             return leftChild;
         }else {
             return rightChild;
         }
     }
-    boolean setChild(AvlNode childNode){
+    boolean setChild(BinaryTreeNode childNode){
         if (childNode!=null&& childNode.getValue()==value){
             if (childNode.getValue()>value){
                 rightChild=childNode;
@@ -124,7 +124,7 @@ class AvlNode {
         }
         return false;
     }
-    boolean removeChild(AvlNode childNode){
+    boolean removeChild(BinaryTreeNode childNode){
         if (rightChild==childNode){
             rightChild=null;
         }else if (leftChild==childNode){
@@ -135,7 +135,7 @@ class AvlNode {
         return true;
     }
 
-    void setParent(AvlNode parent) {
+    void setParent(BinaryTreeNode parent) {
         this.parent = parent;
     }
 }

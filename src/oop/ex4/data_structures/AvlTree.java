@@ -5,20 +5,17 @@ package oop.ex4.data_structures;
  *
  * @author itamar108 nlux.
  */
-public class AvlTree {
+public class AvlTree extends BinaryTree{
 
-    private AvlNode smallestSon;
-    private AvlNode root;
+    private BinaryTreeNode root;
+    private BinaryTreeNode smallestSon;
     private int treeSize = 0;
-
     /**
      * A default constructor.
      */
     public AvlTree() {
 
     }
-
-
     /**
      * A constructor that builds the tree by adding the elements in the input array one-by-one If the same
      * values appears twice (or more) in the list, it is ignored.
@@ -26,151 +23,65 @@ public class AvlTree {
      * @param data - values to add to tree
      */
     public AvlTree(int[] data) {
-
-
+        for (int value:data) {
+            if (root==null){
+                root=new BinaryTreeNode(value);
+            }else {
+            add(value);}
+        }
     }
 
-    /**
-     * Add a new node with key newValue into the tree.
-     *
-     * @param newValue - new value to add to the tree.
-     * @return - false if newValue already exist in the tree
-     */
+    @Override
     public boolean add(int newValue) {
-
-        if (smallestSon.getValue() >= newValue) {
-            return setNextPath(smallestSon, newValue);//TODO blance tree and update  higte
-        }
-        AvlNode lastFather = fatherOfElement(newValue);
-        return setNextPath(lastFather, newValue);
-    }
-
-
-    /*
-     * this function receives an appropriate father (using getNextPath method),
-     * and a value to insert to the tree, and puts the value
-     * in it's right place in relation to the father (right/left son). .
-     * @param father - the suitable father
-     * @param newValue - the value to be added
-     * @return true if value was added, and false if it already existed.
-     */
-    private boolean setNextPath(AvlNode father, int newValue) {
-        if (getNextPath(father, newValue) != null) {
-            return false;
-        }
-        AvlNode son = new AvlNode(father, newValue);
-        if (father.getValue() < newValue) {
-            father.setRightChild(son);
-        } else {
-            father.setLeftChild(son);
-        }
-        treeSize++;
-        return true;
-    }
-
-    private AvlNode getNextPath(AvlNode father, int value) {
-        if (value > father.getValue())  // if current node value is bigger the given one
-        {
-            return father.getRightChild();
-        }
-        if (value < father.getValue()) {
-            return father.getLeftChild();
-        }
-        return father;
-
-    }
-
-
-    /*
-     * this function searches the tree for a certain given value, and returns the node that contains it.
-     * @param - searchVal - the value to be searched.
-     * @return - the node containing the value, null if value is not in the tree.
-     */
-    private AvlNode elementFinder(int searchVal) {
-        return getNextPath(fatherOfElement(searchVal), searchVal);
-
-    }
-
-    private AvlNode fatherOfElement(int searchVal) {
-        AvlNode nextPath = root;
-        AvlNode lastPath = root;
-        while (nextPath != null && nextPath.getValue() != searchVal) {
-            lastPath = nextPath;
-            nextPath = getNextPath(root, searchVal);
-        }
-        return lastPath;
-    }
-
-    /**
-     * Does tree contain a given input value.
-     *
-     * @param searchVal - value to search for
-     * @return if val is found in the tree, return the depth of its node (where 0 is the root).
-     * Otherwise -- return -1.
-     */
-    public int contains(int searchVal) {
-        int depth=0;
-        AvlNode currentNode=root;
-        AvlNode newNode;
-        do {
-            newNode = getNextPath(currentNode,searchVal);
-            if (newNode==currentNode){
-                return depth;
-            }
-            depth++;
-            currentNode=newNode;
-        }while (currentNode!=null);
-        return -1;
-
-    }
-
-    /**
-     * Remove a node from the tree, if it exists.
-     *
-     * @param toDelete - value to delete.
-     * @return true iff toDelete found and deleted.
-     */
-    public boolean delete(int toDelete) {
-        if (toDelete == smallestSon.getValue()) {
-            smallestSon = smallestSon.getParent();
-            smallestSon.setLeftChild(null);
-            treeSize--;
-            return true;
-        }
-        AvlNode fatherToDelete = fatherOfElement(toDelete);
-        AvlNode nodeToDelete = getNextPath(fatherToDelete, toDelete);
-        if (nodeToDelete != null) {
-            if (nodeToDelete.getLeftChild() != null || nodeToDelete.getRightChild() != null) {
-                if (nodeToDelete.getLeftChild() == null ^ nodeToDelete.getRightChild() == null) {
-                    replaceOnlyChild(nodeToDelete,nodeToDelete.getChild());
-                } else {
-                    AvlNode replaceNode = findSucsseor(nodeToDelete);
-                    if (replaceNode==null){
-                        return false;
-                    }
-                    replaceOnlyChild(nodeToDelete,replaceNode);
-                    replaceNode.setChild(replaceNode.getRightChild());
-                    replaceNode.setChild(replaceNode.getLeftChild());
-                }
-            } else {
-                nodeToDelete.getParent().removeChild(nodeToDelete);
-            }
-            treeSize--;
+        if (super.add(newValue)){
+            BinaryTreeNode currentNode=elementFinder(newValue);
+            balanceVoilationChecker(currentNode);
             return true;
         }
         return false;
     }
-    private void replaceOnlyChild(AvlNode nodeToReplace,AvlNode replaceNode){
-        if (replaceNode.getParent()!=null) {
-            replaceNode.getParent().removeChild(replaceNode);//TODO rais exeption;
-            nodeToReplace.getParent().setChild(replaceNode);//TODO should we move it to the other class??
-        }else{
-            nodeToReplace.setParent(null);
+
+    @Override
+    public boolean delete(int toDelete) {
+        if (super.delete(toDelete)){
+            BinaryTreeNode currentNode=fatherOfElement(toDelete);
+            balanceVoilationChecker(currentNode);
+            return true;
+        }
+        return false;
+    }
+    /*
+     * this function checks for avl violations in the tree, and fixes them if founds.
+     * @param updatedNode - the node that have been changed (deleted/added)
+     */
+
+    private void balanceVoilationChecker(BinaryTreeNode updatedNode){
+        BinaryTreeNode currentNode=updatedNode;
+        do {
+            balanceTree(currentNode);
+            currentNode = currentNode.getParent();
+        }while (currentNode.getParent()!=null);
+
+    }
+    private void balanceTree(BinaryTreeNode currentNode){
+        int violation= balancedViolation(currentNode);
+        while (violation!=0){
+            if (violation>0) {
+                rotate(currentNode.getLeftChild(), currentNode);
+            }else {
+                rotate(currentNode.getRightChild(),currentNode);
+            }
+            if (Math.abs(violation)==1){
+                rotate(currentNode.getParent(),currentNode.getParent().getParent());
+            }
+            currentNode.updateAncestorsDistanceToLeaf();
+            violation= balancedViolation((currentNode));
         }
     }
-    private void rotate(AvlNode child,AvlNode father){
+
+    private void rotate(BinaryTreeNode child, BinaryTreeNode father){
         replaceOnlyChild(father,child);
-        AvlNode childOfChildToFather;
+        BinaryTreeNode childOfChildToFather;
         if (father.getValue()>child.getValue()){
             childOfChildToFather=child.getRightChild();
         }else {
@@ -179,41 +90,14 @@ public class AvlTree {
         father.setChild(childOfChildToFather);
         child.setChild(father);
     }
-
-    private AvlNode findSucsseor(AvlNode baseNode) {
-        AvlNode succsseor = minRight(baseNode);
-        if (succsseor!=null){
-            return succsseor;
-        }
-        succsseor=baseNode;
-        while (succsseor.getParent()!=null){
-            succsseor=succsseor.getParent();
-            if (succsseor.getValue()>baseNode.getValue()){
-                return succsseor;
-            }
-        }
-        return null;
-    }
-
-    private AvlNode minRight(AvlNode baseNode) {
-        AvlNode minRightNode = baseNode.getRightChild();
-        if (minRightNode == null) {
-            return baseNode;
-        }
-        while (minRightNode.getLeftChild() != null) {
-            minRightNode = minRightNode.getLeftChild();
-        }
-        return minRightNode;
-    }
-    private void balnceVoilationChecker(AvlNode updatedNode){
-        AvlNode currentNode=updatedNode;
-        do {
-            balanceTree(updatedNode);
-            updatedNode=updatedNode.getParent();
-        }while (currentNode.getParent()!=null);
-
-    }
-    private int balnceFactor(AvlNode currentNode){
+    /*
+     * this function returns the AVL balance factor at a given node. it does so by caluclating the biggest
+     * distance from leaf of the right son, and biggest distance from leaf of the left son, and subtracting
+     * between them.
+     * @param currentNode - the node to return it's balance factor
+     * @return - the AVl balance factor
+     */
+    private int balanceFactor(BinaryTreeNode currentNode){
         int rightHigte=-1;
         int leftHight =-1;
         if (currentNode.getLeftChild()!=null){
@@ -227,13 +111,13 @@ public class AvlTree {
     /*
     * defind the kind of violation , 0 no violation , 2 LL , 1 RL ,-1 LR ,-2 RR.
      */
-    private int balancedViolation(AvlNode perentToCheck){
-        int violation = balnceFactor(perentToCheck);
+    private int balancedViolation(BinaryTreeNode perentToCheck){
+        int violation = balanceFactor(perentToCheck);
         if (Math.abs(violation)<=1){
             return 0;
         }
-        int leftChildViolation=balnceFactor(perentToCheck.getLeftChild());
-        int rightChildViolation=balnceFactor(perentToCheck.getRightChild());
+        int leftChildViolation= balanceFactor(perentToCheck.getLeftChild());
+        int rightChildViolation= balanceFactor(perentToCheck.getRightChild());
         if (violation>0){
             if (leftChildViolation>=0){
                 return 2;
@@ -245,26 +129,6 @@ public class AvlTree {
             }
             return 1;
         }
-    }
-    private void balanceTree(AvlNode currentNode){
-        int violation= balancedViolation(currentNode);
-        while (violation!=0){
-            if (violation>0) {
-                rotate(currentNode.getLeftChild(), currentNode);
-            }else {
-                rotate(currentNode.getRightChild(),currentNode);
-            }
-            if (Math.abs(violation)==1){
-                rotate(currentNode.getParent(),currentNode.getParent().getParent());
-            }
-            violation= balancedViolation((currentNode));
-        }
-    }
-    /**
-     * @return the number of nodes in the tree.
-     */
-    public int size() {
-        return treeSize;
     }
 
     /**
@@ -286,6 +150,7 @@ public class AvlTree {
     public static int findMaxNodes(int h){
         return (int)(Math.pow(2,h)-1);
     }//TODO added new method
+
 
 }
 
