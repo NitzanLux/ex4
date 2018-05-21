@@ -20,44 +20,60 @@ class AvlNode {
     * the parent of the node.
      */
     private AvlNode parent;
-    /*
-    * the depth of the node from the fares desendence.
-     */
-    private int depth =0;
-    /*
-    * number of decendens of the node.
-     */
-    //private int numberOfDecendens=0;TODO delete
 
+    /*
+    *TODO documentation
+     */
+    private int biggestDistanceToLeaf=0;
     AvlNode(){
 
     }
     /*
-     * root constractor.
+     * root constructor.
      */
     AvlNode(int value){
         this.value=value;
     }
+    //TODO expleine its a leaf
     AvlNode(AvlNode parent,int value){
         this.value=value;
         this.parent=parent;
-        // parent.addChildCount();//TODO delete
-        depth=parent.depth+1;
+        updateAncestorsDistanceToLeaf();
+    }
+    void updateAncestorsDistanceToLeaf(){
+        if (parent==null){ // if its the root
+            return;
+        }
+        int currentDistance=biggestDistanceToLeaf;
+        setDistance();
+        if (currentDistance==biggestDistanceToLeaf){
+            return;
+        }
+        parent.updateAncestorsDistanceToLeaf();
+    }
+    void setDistance(){
+        int biggestDistanseLeft=-1;
+        int biggestDistanseRight=-1;
+        if (rightChild!=null) {
+            biggestDistanseRight=rightChild.biggestDistanceToLeaf;
+        }
+        if (leftChild!=null){
+            biggestDistanseLeft=leftChild.biggestDistanceToLeaf;
+        }
+        if (biggestDistanseLeft>biggestDistanseRight){
+            biggestDistanceToLeaf=biggestDistanseLeft+1;
+        }else {
+            biggestDistanceToLeaf=biggestDistanseRight+1;
+        }
+    }
+
+    int getBiggestDistanceToLeaf() {
+        return biggestDistanceToLeaf;
     }
 
     /*
-    * add child to the currant node count and all of his fathers.
-     */
-//    private void addChildCount(){
-//        numberOfDecendens++;
-//        if (parent!=null){
-//            parent.addChildCount();
-//        }
-//    }//TODO delete
-
-    /*
-    * get the left child of the current node.
-     */
+        * get the left child of the current node.
+         */
     AvlNode getLeftChild() {
         return leftChild;
     }
@@ -73,17 +89,13 @@ class AvlNode {
     *   get the parent of the node
      */
     AvlNode getParent() {
+
         return parent;
     }
-    /*
-    * get the current depth of the node.
-     */
-    int getDepth() {
-        return depth;
-    }
 
-    int getValue ()
-    {return value;}
+    int getValue () {
+        return value;
+    }
 
     void setRightChild(AvlNode rightChild) {
         this.rightChild = rightChild;

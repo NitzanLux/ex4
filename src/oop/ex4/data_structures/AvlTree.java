@@ -101,7 +101,6 @@ public class AvlTree {
         return lastPath;
     }
 
-
     /**
      * Does tree contain a given input value.
      *
@@ -110,9 +109,17 @@ public class AvlTree {
      * Otherwise -- return -1.
      */
     public int contains(int searchVal) {
-        AvlNode requstedNode = elementFinder(searchVal);
-        if (requstedNode != null)
-            return requstedNode.getDepth();
+        int depth=0;
+        AvlNode currentNode=root;
+        AvlNode newNode;
+        do {
+            newNode = getNextPath(currentNode,searchVal);
+            if (newNode==currentNode){
+                return depth;
+            }
+            depth++;
+            currentNode=newNode;
+        }while (currentNode!=null);
         return -1;
 
     }
@@ -154,10 +161,25 @@ public class AvlTree {
         return false;
     }
     private void replaceOnlyChild(AvlNode nodeToReplace,AvlNode replaceNode){
-        replaceNode.getParent().removeChild(replaceNode);//TODO rais exeption;
-        nodeToReplace.getParent().setChild(replaceNode);//TODO should we move it to the other class??
-
+        if (replaceNode.getParent()!=null) {
+            replaceNode.getParent().removeChild(replaceNode);//TODO rais exeption;
+            nodeToReplace.getParent().setChild(replaceNode);//TODO should we move it to the other class??
+        }else{
+            nodeToReplace.setParent(null);
+        }
     }
+    private void rotate(AvlNode child,AvlNode father){
+        replaceOnlyChild(father,child);
+        AvlNode childOfChildToFather;
+        if (father.getValue()>child.getValue()){
+            childOfChildToFather=child.getRightChild();
+        }else {
+            childOfChildToFather=child.getLeftChild();
+        }
+        father.setChild(childOfChildToFather);
+        child.setChild(father);
+    }
+
     private AvlNode findSucsseor(AvlNode baseNode) {
         AvlNode succsseor = minRight(baseNode);
         if (succsseor!=null){
@@ -183,8 +205,61 @@ public class AvlTree {
         }
         return minRightNode;
     }
+    private void balnceVoilationChecker(AvlNode updatedNode){
+        AvlNode currentNode=updatedNode;
+        do {
+            balanceTree(updatedNode);
+            updatedNode=updatedNode.getParent();
+        }while (currentNode.getParent()!=null);
 
-
+    }
+    private int balnceFactor(AvlNode currentNode){
+        int rightHigte=-1;
+        int leftHight =-1;
+        if (currentNode.getLeftChild()!=null){
+            leftHight=currentNode.getLeftChild().getBiggestDistanceToLeaf();
+        }
+        if (currentNode.getRightChild()!=null){
+            rightHigte=currentNode.getRightChild().getBiggestDistanceToLeaf();
+        }
+        return (leftHight-rightHigte);
+    }
+    /*
+    * defind the kind of violation , 0 no violation , 2 LL , 1 RL ,-1 LR ,-2 RR.
+     */
+    private int balancedViolation(AvlNode perentToCheck){
+        int violation = balnceFactor(perentToCheck);
+        if (Math.abs(violation)<=1){
+            return 0;
+        }
+        int leftChildViolation=balnceFactor(perentToCheck.getLeftChild());
+        int rightChildViolation=balnceFactor(perentToCheck.getRightChild());
+        if (violation>0){
+            if (leftChildViolation>=0){
+                return 2;
+            }
+            return -1;
+        }else {//TODO megic num of the ahoshloki
+            if (rightChildViolation<=0){
+                return -2;
+            }
+            return 1;
+        }
+    }
+    private void balanceTree(AvlNode currentNode){
+        int violation= balancedViolation(currentNode);
+        while (violation!=0){
+            if (violation>0) {
+                rotate(currentNode.getLeftChild(), currentNode);
+            }else {
+                rotate(currentNode.getRightChild(),currentNode);
+            }
+            if (Math.abs(violation)==1){
+                rotate(currentNode.getParent(),currentNode.getParent().getParent());
+            }
+            violation= balancedViolation((currentNode));
+        }
+    }
     /**
      * @return the number of nodes in the tree.
      */
