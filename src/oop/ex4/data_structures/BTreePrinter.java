@@ -90,7 +90,6 @@ public class BTreePrinter {
 
         return true;
     }
-
     public static void main(String[] args) {
         Scanner scanner=new Scanner(System.in);
         System.out.printf("hello you dipshit plese choose how many numbers???????");

@@ -11,7 +11,6 @@ import static oop.ex4.data_structures.BTreePrinter.printNode;
  */
 public class AvlTree extends BinaryTree{
 
-    private int treeSize = 0;
     /**
      * A default constructor.
      */
