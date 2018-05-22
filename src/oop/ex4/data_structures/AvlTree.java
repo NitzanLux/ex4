@@ -10,12 +10,12 @@ import static oop.ex4.data_structures.BTreePrinter.printNode;
  * @author itamar108 nlux.
  */
 public class AvlTree extends BinaryTree{
-
+    int temp=0;//TODO;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     /**
      * A default constructor.
      */
     public AvlTree() {
-
+        super();
     }
     /**
      * A constructor that builds the tree by adding the elements in the input array one-by-one If the same
@@ -24,28 +24,17 @@ public class AvlTree extends BinaryTree{
      * @param data - values to add to tree
      */
     public AvlTree(int[] data) {
-        for (int value:data) {
-            if (root==null){
-                root=new BinaryTreeNode(value);
-                smallestNode = root;
-            }
-            else
-            {
-                add(value);
-            }
-            printNode(root);//TODO itamarrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr108
-        }
+        super(data);
     }
 //    public AvlTree(AvlTree avlTree){
 //        smallestNode
 //    }
     @Override
     public boolean add(int newValue) {
-        if (super.add(newValue)){
+        boolean isAdded=super.add(newValue);
+        if (isAdded){
             BinaryTreeNode currentNode=elementFinder(newValue);
-            System.out.println("yesaso");//TODO tyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
             balanceVoilationChecker(currentNode);
-            System.out.println("yeso");//TODO yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
             return true;
         }
         return false;
@@ -60,6 +49,17 @@ public class AvlTree extends BinaryTree{
         }
         return false;
     }
+    /**
+     * Does tree contain a given input value.
+     *
+     * @param searchVal - value to search for
+     * @return if val is found in the tree, return the depth of its node (where 0 is the root).
+     * Otherwise -- return -1.
+     */
+    @Override
+    public int contains(int searchVal) {
+        return super.contains(searchVal);
+    }
     /*
      * this function checks for avl violations in the tree, and fixes them if founds.
      * @param updatedNode - the node that have been changed (deleted/added)
@@ -68,11 +68,10 @@ public class AvlTree extends BinaryTree{
     private void balanceVoilationChecker(BinaryTreeNode updatedNode){
         BinaryTreeNode currentNode=updatedNode;
         do {
-            System.out.println("yes");//TODO tyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
             balanceTree(currentNode);
-            System.out.println("yesitamar108");//TODO tyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
             currentNode = currentNode.getParent();
-        }while (currentNode.getParent()!=null);
+            System.out.println(temp++);//TODO;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+        }while (currentNode!=null);
 
     }
     private void balanceTree(BinaryTreeNode currentNode){
@@ -93,6 +92,9 @@ public class AvlTree extends BinaryTree{
 
     private void rotate(BinaryTreeNode child, BinaryTreeNode father){
         replaceOnlyChild(father,child);
+        if (father==root){
+            root=child;
+        }
         BinaryTreeNode childOfChildToFather;
         System.out.println("yes");//TODO tyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
         if (father.getValue()>child.getValue()){
@@ -102,6 +104,7 @@ public class AvlTree extends BinaryTree{
         }
         father.setChild(childOfChildToFather);
         child.setChild(father);
+        father.updateAncestorsDistanceToLeaf();
     }
     /*
      * this function returns the AVL balance factor at a given node. it does so by caluclating the biggest
@@ -113,9 +116,6 @@ public class AvlTree extends BinaryTree{
     private int balanceFactor(BinaryTreeNode currentNode){
         int rightHigte=-1;
         int leftHight =-1;
-        if (currentNode==null){
-            return -1;
-        }
         if (currentNode.getLeftChild()!=null){
             leftHight=currentNode.getLeftChild().getBiggestDistanceToLeaf();
         }
@@ -127,13 +127,18 @@ public class AvlTree extends BinaryTree{
     /*
     * defind the kind of violation , 0 no violation , 2 LL , 1 RL ,-1 LR ,-2 RR.
      */
-    private int balancedViolation(BinaryTreeNode perentToCheck){
-        int violation = balanceFactor(perentToCheck);
+    private int balancedViolation(BinaryTreeNode nodeToCheck){//TODO fucking bug i shit you not
+        int violation = balanceFactor(nodeToCheck);
         if (Math.abs(violation)<=1){
             return 0;
         }
-        int leftChildViolation= balanceFactor(perentToCheck.getLeftChild());
-        int rightChildViolation= balanceFactor(perentToCheck.getRightChild());
+        int leftChildViolation=0;
+        int rightChildViolation=0;
+        if (nodeToCheck.getLeftChild()!=null){
+            leftChildViolation= balanceFactor(nodeToCheck.getLeftChild());}
+        if (nodeToCheck.getRightChild()!=null){
+            rightChildViolation=balanceFactor(nodeToCheck.getRightChild());
+        }
         if (violation>0){
             if (leftChildViolation>=0){
                 return 2;

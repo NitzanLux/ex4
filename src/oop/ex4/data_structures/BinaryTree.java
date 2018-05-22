@@ -2,6 +2,8 @@ package oop.ex4.data_structures;
 
 import java.util.Iterator;
 
+import static oop.ex4.data_structures.BTreePrinter.printNode;
+
 abstract class BinaryTree {
 
     BinaryTreeNode smallestNode;
@@ -9,12 +11,22 @@ abstract class BinaryTree {
     private int treeSize = 0;
 
 
+    BinaryTree(int[] data) {
+        for (int value : data) {
+            add(value);
+        }
+    }
+
+    BinaryTree() {
+
+    }
+
     BinaryTreeNode fatherOfElement(int searchVal) {
         BinaryTreeNode nextPath = root;
         BinaryTreeNode lastPath = root;
         while (nextPath != null && nextPath.getValue() != searchVal) {
             lastPath = nextPath;
-            nextPath = getNextPath(root, searchVal);
+            nextPath = getNextPath(lastPath, searchVal);
         }
         return lastPath;
     }
@@ -27,12 +39,16 @@ abstract class BinaryTree {
      * @return - false if newValue already exist in the tree
      */
     public boolean add(int newValue) {
-        System.out.println(smallestNode.getValue());//TODO gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg
-        if (smallestNode!=null && smallestNode.getValue() > newValue) {
+        if (smallestNode != null && smallestNode.getValue() >= newValue) {
             return setNextPath(smallestNode, newValue);//TODO blance tree and update  higte
         }
 
         BinaryTreeNode lastFather = fatherOfElement(newValue);
+        if (lastFather == null) {
+            root = new BinaryTreeNode(newValue);
+            smallestNode = root;
+            return true;
+        }
         return setNextPath(lastFather, newValue);
     }
 
@@ -46,19 +62,21 @@ abstract class BinaryTree {
      * @return true if value was added, and false if it already existed.
      */
     private boolean setNextPath(BinaryTreeNode father, int newValue) {
-        if (getNextPath(father, newValue) != null) {
+        BinaryTreeNode nextPath = getNextPath(father, newValue);
+        if (nextPath!= null) {
             return false;
         }
         BinaryTreeNode son = new BinaryTreeNode(father, newValue);
-        if (father.getValue() < newValue) {
-            father.setRightChild(son);
-        } else if (father.getValue()>newValue){
-            father.setLeftChild(son);
-        }else {
-            return false;
-        }
+        father.setChild(son);
+        son.updateAncestorsDistanceToLeaf();
+//            if (father.getValue() < newValue) {
+//                father.setRightChild(son);
+//            } else if (father.getValue() > newValue) {
+//                father.setLeftChild(son);
         treeSize++;
         return true;
+
+
     }
 
 
@@ -79,7 +97,10 @@ abstract class BinaryTree {
         if (value < father.getValue()) {
             return father.getLeftChild();
         }
-        return father;
+        if (value==father.getValue()){
+            return father;
+        }
+        return null;
 
     }
 
@@ -95,25 +116,25 @@ abstract class BinaryTree {
     }
 
 
-    /**
+    /*
      * Does tree contain a given input value.
      *
      * @param searchVal - value to search for
      * @return if val is found in the tree, return the depth of its node (where 0 is the root).
      * Otherwise -- return -1.
      */
-    public int contains(int searchVal) {
-        int depth=0;
-        BinaryTreeNode currentNode=root;
+     int contains(int searchVal) {
+        int depth = 0;
+        BinaryTreeNode currentNode = root;
         BinaryTreeNode newNode;
         do {
-            newNode = getNextPath(currentNode,searchVal);
-            if (newNode==currentNode){
+            newNode = getNextPath(currentNode, searchVal);
+            if (newNode == currentNode) {
                 return depth;
             }
             depth++;
-            currentNode=newNode;
-        }while (currentNode!=null);
+            currentNode = newNode;
+        } while (currentNode != null);
         return -1;
 
     }
@@ -136,13 +157,13 @@ abstract class BinaryTree {
         if (nodeToDelete != null) {
             if (nodeToDelete.getLeftChild() != null || nodeToDelete.getRightChild() != null) {
                 if (nodeToDelete.getLeftChild() == null ^ nodeToDelete.getRightChild() == null) {
-                    replaceOnlyChild(nodeToDelete,nodeToDelete.getChild());
+                    replaceOnlyChild(nodeToDelete, nodeToDelete.getChild());
                 } else {
                     BinaryTreeNode replaceNode = findSuccessor(nodeToDelete);
-                    if (replaceNode==null){
+                    if (replaceNode == null) {
                         return false;
                     }
-                    replaceOnlyChild(nodeToDelete,replaceNode);
+                    replaceOnlyChild(nodeToDelete, replaceNode);
                     replaceNode.setChild(replaceNode.getRightChild());
                     replaceNode.setChild(replaceNode.getLeftChild());
                 }
@@ -155,25 +176,35 @@ abstract class BinaryTree {
         return false;
     }
 
-    void replaceOnlyChild(BinaryTreeNode nodeToReplace, BinaryTreeNode replaceNode){
-        if (replaceNode.getParent()!=null) {
-            replaceNode.getParent().removeChild(replaceNode);//TODO rais exeption;
-            nodeToReplace.getParent().setChild(replaceNode);//TODO should we move it to the other class??
-        }else{
-            nodeToReplace.setParent(null);
+    void replaceOnlyChild(BinaryTreeNode nodeToReplace, BinaryTreeNode replaceNode) {
+        BinaryTreeNode nodeToReplaceParent=nodeToReplace.getParent();
+        {
+            BinaryTreeNode replaceNodeParent=replaceNode.getParent();//TODO remove scoaping(smartly)
+            if (replaceNodeParent!=null){
+                replaceNodeParent.removeChild(replaceNode);
+            }
+        }
+        if (nodeToReplaceParent != null) {
+            nodeToReplaceParent.setChild(replaceNode);
+//            replaceNode.getParent().removeChild(replaceNode);//TODO rais exeption;
+//            if (nodeToReplace.getParent()!=null) {//TODO should we move it to the other class??
+//                nodeToReplace.getParent().setChild(replaceNode);
+//            }
+        } else {
+            replaceNode.setParent(null);
         }
     }
 
 
     BinaryTreeNode findSuccessor(BinaryTreeNode baseNode) {
         BinaryTreeNode successor = minRight(baseNode);
-        if (successor!=null){
+        if (successor != null&& successor.getValue()!=baseNode.getValue()) {//if itself the minRight.
             return successor;
         }
-        successor=baseNode;
-        while (successor.getParent()!=null){
-            successor=successor.getParent();
-            if (successor.getValue()>baseNode.getValue()){
+        successor = baseNode;
+        while (successor.getParent() != null) {
+            successor = successor.getParent();
+            if (successor.getValue() > baseNode.getValue()) {
                 return successor;
             }
         }
@@ -198,30 +229,24 @@ abstract class BinaryTree {
     public int size() {
         return treeSize;
     }
-    public java.util.Iterator<java.lang.Integer> iterator(){
-        Iterator<Integer> iterator=new Iterator<Integer>() {
+
+
+    public java.util.Iterator<java.lang.Integer> iterator() {
+        return new Iterator<Integer>() {
             private BinaryTreeNode currentNode=smallestNode;
             @Override
             public boolean hasNext() {
-                if (findSuccessor(currentNode)!=null){
-                    return true;
-                }
-                return false;
+                return (currentNode != null);
             }
 
             @Override
             public Integer next() {
                 Integer valueToReturn=currentNode.getValue();
-                currentNode=findSuccessor(currentNode);
+                currentNode = findSuccessor(currentNode);
                 return valueToReturn;
             }
-
-            @Override
-            public void remove() {
-                throw new UnsupportedOperationException();
-            }
         };
-        return iterator;
     }
+
 
 }

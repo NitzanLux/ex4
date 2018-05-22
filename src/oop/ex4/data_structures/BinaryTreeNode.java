@@ -11,20 +11,20 @@ class BinaryTreeNode {
     /*
     * the left child of the node .
      */
-    BinaryTreeNode leftChild;
+    private BinaryTreeNode leftChild;
     /*
    * the right child of the node .
     */
-    BinaryTreeNode rightChild;
+    private BinaryTreeNode rightChild;
     /*
     * the parent of the node.
      */
-    BinaryTreeNode parent;
+    private BinaryTreeNode parent;
 
     /*
     *TODO documentation
      */
-    private int biggestDistanceToLeaf=0;
+    private int biggestDistanceToLeaf=-1;
     BinaryTreeNode(){
 
     }
@@ -38,18 +38,22 @@ class BinaryTreeNode {
     BinaryTreeNode(BinaryTreeNode parent, int value){
         this.value=value;
         this.parent=parent;
-        updateAncestorsDistanceToLeaf();
     }
     void updateAncestorsDistanceToLeaf(){
-        if (parent==null){ // if its the root
+        setDistance();
+        if(parent==null){// if its the root
             return;
         }
+        parent.ancestorsDistanceToLeaf();
+
+    }
+    void ancestorsDistanceToLeaf(){
         int currentDistance=biggestDistanceToLeaf;
         setDistance();
-        if (currentDistance==biggestDistanceToLeaf){
+        if (currentDistance==biggestDistanceToLeaf||parent==null){
             return;
         }
-        parent.updateAncestorsDistanceToLeaf();
+        parent.ancestorsDistanceToLeaf();
     }
     void setDistance(){
         int biggestDistanseLeft=-1;
@@ -112,11 +116,10 @@ class BinaryTreeNode {
         }
     }
     boolean setChild(BinaryTreeNode childNode){
-        if (childNode!=null&& childNode.getValue()==value){
+        if (childNode!=null && childNode.getValue()!=value){
             if (childNode.getValue()>value){
                 rightChild=childNode;
-            }
-            if (childNode.getValue()<value){
+            }else if (childNode.getValue()<value){
                 leftChild=childNode;
             }
             childNode.setParent(this);
