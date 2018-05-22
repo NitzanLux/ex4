@@ -28,9 +28,33 @@ public class AvlTree extends BinaryTree{
     public AvlTree(int[] data) {
         super(data);
     }
-//    public AvlTree(AvlTree avlTree){
-//        smallestNode
-//    }
+
+
+
+    /**
+     * A copy-constructor that builds the tree from existing tree
+     * @param avlTree - tree to be copied
+
+     */
+    AvlTree(BinaryTree avlTree) {
+            for (Iterator i = avlTree.iterator(); i.hasNext()){
+                add(i.next());
+            }
+
+            for (int value:avlTree){
+
+            }
+
+    }
+
+
+
+    /**
+     * Add a new node with key newValue into the tree.
+     * @param newValue - new value to add to the tree.
+     * @return false iff newValue already exist in the tree
+
+     */
     @Override
     public boolean add(int newValue) {
         boolean isAdded=super.add(newValue);
@@ -42,6 +66,11 @@ public class AvlTree extends BinaryTree{
         return false;
     }
 
+    /**
+     * Remove a node from the tree, if it exists.
+     * @param toDelete - value to delete.
+     * @return true iff toDelete found and deleted
+     */
     @Override
     public boolean delete(int toDelete) {
         if (super.delete(toDelete)){
@@ -53,7 +82,6 @@ public class AvlTree extends BinaryTree{
     }
     /**
      * Does tree contain a given input value.
-     *
      * @param searchVal - value to search for
      * @return if val is found in the tree, return the depth of its node (where 0 is the root).
      * Otherwise -- return -1.

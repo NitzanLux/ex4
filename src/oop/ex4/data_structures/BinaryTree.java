@@ -26,6 +26,7 @@ abstract class BinaryTree {
 
     }
 
+
     BinaryTreeNode fatherOfElement(int searchVal) {
         BinaryTreeNode nextPath = root;
         BinaryTreeNode lastPath = root;
@@ -233,12 +234,13 @@ abstract class BinaryTree {
      */
     public int size() {
         return treeSize;
-    }
+    }//TODO no pablic overide
 
 
-    public java.util.Iterator<java.lang.Integer> iterator() {
+    public java.util.Iterator<java.lang.Integer> iterator() {//TODO no pablic overide
         return new Iterator<Integer>() {
             private BinaryTreeNode currentNode=smallestNode;
+
             @Override
             public boolean hasNext() {
                 return (currentNode != null);
@@ -252,6 +254,8 @@ abstract class BinaryTree {
             }
         };
     }
+    public class binaryTreeIterator
+
 
 
 }

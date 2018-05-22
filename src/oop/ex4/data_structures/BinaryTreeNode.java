@@ -35,11 +35,10 @@ class BinaryTreeNode {
      */
     private final int DEFAULT_DISTANCE_FROM_LEAF = -1;
 
-    /* TODO remove constructor if not needed
+    /*
      * root constructor.
      */
     BinaryTreeNode(){
-
     }
 
 
