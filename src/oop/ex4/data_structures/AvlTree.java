@@ -90,34 +90,27 @@ public class AvlTree extends BinaryTree {
     @Override
     public boolean delete(int toDelete) {
         BinaryTreeNode nodeToDelete = elementFinder(toDelete);
+        if (nodeToDelete==null){
+            return false;
+        }
+        BinaryTreeNode nodeToDeleteParent=nodeToDelete.getParent();
         if (nodeToDelete == null) {
             return false;
         }
-        BinaryTreeNode currentNode = nodeToDelete.getParent();
-        BinaryTreeNode rightDeleteChild = nodeToDelete.getRightChild();
-        BinaryTreeNode leftDeleteChild = nodeToDelete.getLeftChild();
+        boolean hadChild=true;
+        if (nodeToDelete.getChild()==null){
+            hadChild=false;
+        }
         BinaryTreeNode successor = findSuccessor(nodeToDelete);
-        BinaryTreeNode successorParent = findSuccessor(nodeToDelete);
-        BinaryTreeNode successorChild = findSuccessor(nodeToDelete);
         boolean isDelete = super.delete(toDelete);
         if (isDelete) {
-            if (rightDeleteChild != null && leftDeleteChild != null) {
-                if (successorChild != null) {
-                    balanceViolationChecker(successorChild);
-                } else {
-                    if (successorParent != null) {
-                        balanceViolationChecker(successorParent);
-                    }
-                }
-                balanceViolationChecker(successor);
-            } else if (rightDeleteChild != null ^ leftDeleteChild != null) {
-                if (rightDeleteChild != null) {
-                    balanceViolationChecker(rightDeleteChild);
-                } else {
-                    balanceViolationChecker(leftDeleteChild);
-                }
-            } else {
-                balanceViolationChecker(currentNode);
+            if (hadChild){
+            if (successor.getRightChild()!=null){
+                successor=findSuccessor(successor);
+            }
+            balanceViolationChecker(successor);
+            }else {
+                balanceViolationChecker(nodeToDeleteParent);
             }
             return true;
         }
@@ -342,7 +335,7 @@ public class AvlTree extends BinaryTree {
 
         BTreePrinter.printNode(avlTree.root);
         Scanner scanner=new Scanner(System.in);
-        for (int i = 0; i <15 ; i++) {
+        for (int i = 0; i <15; i++) {
             System.out.println("ffff");
             int num=scanner.nextInt();
             avlTree.delete(num);

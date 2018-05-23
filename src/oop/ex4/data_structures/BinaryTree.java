@@ -229,16 +229,30 @@ abstract class BinaryTree implements Iterable<Integer> {
     }
     private void removeNodeWithTwoSons(BinaryTreeNode nodeToDelete){
          BinaryTreeNode nodeToReplace = findSuccessor(nodeToDelete);
-        if (nodeToDelete==root){
-            nodeToReplace=root;
+         BinaryTreeNode nodeToDeleteLeftChild=nodeToDelete.getLeftChild();
+         BinaryTreeNode nodeToDeleteRigthChild=nodeToDelete.getRightChild();
+         BinaryTreeNode nodeToReplaceChild=nodeToReplace.getChild();
+         BinaryTreeNode nodeToDeleteParent=nodeToDelete.getParent();
+         BinaryTreeNode nodeToReplaceParent=nodeToReplace.getParent();
+
+        nodeToDelete.setParent(null);
+        if (nodeToDeleteRigthChild!=nodeToReplace){
+            if (nodeToReplaceChild!=null){
+                nodeToReplaceParent.setChild(nodeToReplaceChild);
+            }else {
+                nodeToReplaceParent.setLeftChild(null);
+            }
+            nodeToReplace.setChild(nodeToDeleteRigthChild);
+        }
+        nodeToReplace.setChild(nodeToDeleteLeftChild);
+        if (nodeToDeleteParent==null){
+            root=nodeToReplace;
+            nodeToReplace.setParent(null);
         }else {
-            nodeToDelete.getParent().setChild(nodeToReplace);
+            nodeToDeleteParent.setChild(nodeToReplace);
         }
-        if (nodeToDelete.getRightChild()!=nodeToReplace){
-            nodeToReplace.getParent().setChild(nodeToReplace.getChild());
-            nodeToReplace.setChild(nodeToDelete.getRightChild());
-        }
-        nodeToReplace.setChild(nodeToDelete.getLeftChild());
+        nodeToReplaceParent.updateAncestorsDistanceToLeaf();
+
 
     }
 
@@ -260,13 +274,10 @@ abstract class BinaryTree implements Iterable<Integer> {
         }
         if (nodeToReplaceParent != null) {
             nodeToReplaceParent.setChild(replaceNode);
-//            replaceNode.getParent().removeChild(replaceNode);//TODO rais exeption;
-//            if (nodeToReplace.getParent()!=null) {//TODO should we move it to the other class??
-//                nodeToReplace.getParent().setChild(replaceNode);
-//            }
         } else {
             replaceNode.setParent(null);
         }
+
     }
 
 
