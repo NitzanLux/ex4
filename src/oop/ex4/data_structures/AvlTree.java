@@ -1,6 +1,10 @@
 package oop.ex4.data_structures;
 
+import java.sql.Time;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 /**
  * This class is the complete and tested implementation of an AVL-tree.
@@ -87,11 +91,17 @@ public class AvlTree extends BinaryTree {
     @Override
     public boolean delete(int toDelete) {
         BinaryTreeNode currentNode = fatherOfElement(toDelete);
-        boolean isDelete=super.delete(toDelete);
-        if (isDelete&&currentNode!=null) {
-            balanceViolationChecker(currentNode);
-            return true;
+        if (toDelete==17612){
+            System.out.println("ffff");//todo dooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
         }
+        boolean isDelete=super.delete(toDelete);
+        if (toDelete==17612){
+            System.out.println("ffff");//todo dooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+        }
+            if (isDelete) {
+                balanceViolationChecker(currentNode);
+                return true;
+            }
         return false;
     }
 
@@ -101,7 +111,6 @@ public class AvlTree extends BinaryTree {
      */
 
     private void balanceViolationChecker(BinaryTreeNode updatedNode) {
-
         BinaryTreeNode currentNode = updatedNode;
         while (currentNode != null){
             balanceTree(currentNode);
@@ -120,7 +129,7 @@ public class AvlTree extends BinaryTree {
         {
             return;
         }
-        if (violation < 1) {// if right violation
+        if (violation < -1) {// if right violation
             BinaryTreeNode rootNode = currentNode.getRightChild();
             if (cheackViolation(currentNode.getRightChild()) == 1) {
                 rorationToLeft(currentNode.getRightChild(), false);
@@ -144,12 +153,15 @@ public class AvlTree extends BinaryTree {
      */
 
     private void rorationToLeft(BinaryTreeNode binaryTreeNode, boolean isLeft) {
+        BinaryTreeNode newFather;
         if (isLeft) {
-            rotate(binaryTreeNode.getRightChild(), binaryTreeNode);
+            newFather=binaryTreeNode.getRightChild();
         } else {
-            rotate(binaryTreeNode.getLeftChild(), binaryTreeNode);
+            newFather=binaryTreeNode.getLeftChild();
         }
+        rotate(newFather, binaryTreeNode);
         binaryTreeNode.updateAncestorsDistanceToLeaf();
+
     }
 
     /*
@@ -291,8 +303,14 @@ public class AvlTree extends BinaryTree {
         Random random=new Random();
         AvlTree avlTree=new AvlTree();
         int size=0;
-        for (int i = 0; i <10; i++) {
-            avlTree.add(i/2);
+        for (int i = 1; i <10; i++) {
+            try {
+                avlTree.add(i);
+                BTreePrinter.printNode(avlTree.root);
+                TimeUnit.SECONDS.sleep(1);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
         for (int i = 0; i <10; i++) {
             if (avlTree.contains(i)!=-1){
@@ -300,6 +318,7 @@ public class AvlTree extends BinaryTree {
                 size++;
             }
         }
+
         for (int i = 0; i <10 ; i++) {
             avlTree.delete(i);
         }

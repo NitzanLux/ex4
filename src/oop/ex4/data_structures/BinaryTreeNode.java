@@ -87,9 +87,8 @@ class BinaryTreeNode {
     {
         int currentDistance=biggestDistanceToLeaf;
         setDistance();
-        if (currentDistance==biggestDistanceToLeaf||parent==null) //if biggest distance havn't changed, or
-            // its the root
-        {
+        if (parent==null) //if biggest distance havn't changed, or its the root
+            {
             return;
         }
         parent.ancestorsDistanceToLeaf();

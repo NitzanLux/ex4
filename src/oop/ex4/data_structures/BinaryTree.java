@@ -17,6 +17,7 @@ abstract class BinaryTree implements Iterable<Integer> {
     BinaryTreeNode smallestNode;
     BinaryTreeNode root;
     private int treeSize = 0;
+    int temp=0 ;//todo oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
 
     /*
      * constructor from an array. buiilds a tree based of the values given in the array.
@@ -198,25 +199,39 @@ abstract class BinaryTree implements Iterable<Integer> {
 
     private BinaryTreeNode removeNode(BinaryTreeNode nodeToDelete) {
         BinaryTreeNode fatherToDelet = nodeToDelete.getParent();
-
+        treeSize--;
         if (nodeToDelete.getLeftChild() == null || nodeToDelete.getRightChild() == null) {
-            treeSize--;
             if (nodeToDelete.getLeftChild() == null ^ nodeToDelete.getRightChild() == null) {
                 BinaryTreeNode onlyChildOfToDelete = nodeToDelete.getChild();
                 replaceOnlyChild(nodeToDelete, onlyChildOfToDelete);
+                onlyChildOfToDelete.updateAncestorsDistanceToLeaf();
                 return onlyChildOfToDelete;
             } else {
                 if (fatherToDelet != null) {
                     fatherToDelet.removeChild(nodeToDelete);
+                    fatherToDelet.updateAncestorsDistanceToLeaf();
+                    System.out.println("ffff");//todo dooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
                 }
                 return null;
             }
         } else {
+            if (nodeToDelete.getValue()==17612){
+                System.out.println("ffff");//todo dooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+            }
             BinaryTreeNode nodeToReplace = findSuccessor(nodeToDelete);
-            removeNode(nodeToReplace);
+            BinaryTreeNode fatherNodeToReplace=nodeToReplace.getParent();
+            fatherNodeToReplace.removeChild(nodeToReplace);
+            fatherNodeToReplace.setChild(nodeToReplace.getChild());
             replaceOnlyChild(nodeToDelete, nodeToReplace);
             nodeToReplace.setChild(nodeToDelete.getLeftChild());
             nodeToReplace.setChild(nodeToDelete.getRightChild());
+            if (fatherNodeToReplace.getRightChild()!=null) {
+                fatherNodeToReplace.getRightChild().setDistance();
+            }
+            if (fatherNodeToReplace.getLeftChild()!=null) {
+                fatherNodeToReplace.getLeftChild().setDistance();
+            }
+            fatherNodeToReplace.updateAncestorsDistanceToLeaf();
             return nodeToReplace;
         }
     }

@@ -82,10 +82,13 @@ public class Tester_oop_ex4 {
 		for (int i = 0; i <= size / 2; i++) {
 			int x = (i * 1153) % size;
 			boolean b = set.remove(x);
+			if (x==17612){
+				System.out.println(b);//todo dooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+			}
 			assertEquals("problem with deletion of " + x, b, tree.delete(x));
 			assertEquals("problem with deletion of " + x, b, secondTree.delete(x));
+			System.out.println(x);//todo aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 		}
-		System.out.println("ffffffffffffffffff");//todo aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 		assertEquals(set.size(), tree.size());
 		assertEquals(set.size(), secondTree.size());
 
@@ -114,7 +117,6 @@ public class Tester_oop_ex4 {
 			assertEquals("problem with depth of " + x, set.contains(x), secondTree.contains(x) >= 0);
 
 		}
-
 		Iterator<Integer> treeIter = tree.iterator();
 		Iterator<Integer> secondTreeIter = secondTree.iterator();
 		Iterator<Integer> setIter = set.iterator();
@@ -132,6 +134,7 @@ public class Tester_oop_ex4 {
 			assertEquals("problem with deletion of " + x, b, secondTree.delete(x));
 
 		}
+		System.out.println("fffffffffOoOoOoOoO");
 		assertEquals(set.size(), tree.size());
 		assertEquals(set.size(), secondTree.size());
 	}
@@ -432,6 +435,10 @@ public class Tester_oop_ex4 {
 		for (Move move : testData) {
 			switch (move.type) {
 				case Move.ADD:
+					System.out.println();
+					if (testData.id==5){
+						System.out.println("Ffff");//todo ttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
+					}
 					errMsg = errMsgStart + "trying to add " + move.data + "...";
 					assertEquals(errMsg, hashSet.add(move.data), tree.add(move.data));
 					break;
@@ -445,9 +452,7 @@ public class Tester_oop_ex4 {
 		}
 		for (Move move : testData) {
 			if (hashSet2.contains(move.data)) continue;
-			if (testData.id==5&&move.data==1){
-				System.out.println("Ffff");//todo ttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
-			}
+
 			errMsg = errMsgStart + "the depth of " + move.data + " should be " + move.depth + "...";
 			assertEquals(errMsg, move.depth, tree.contains(move.data));
 
