@@ -2,6 +2,7 @@ package oop.ex4.data_structures;
 
 import java.sql.Time;
 import java.util.Random;
+import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
@@ -53,13 +54,14 @@ public class AvlTree extends BinaryTree {
      */
     AvlTree(BinaryTree avlTree) {
         super();
-        if (avlTree!=null){
-        for (int value : avlTree) {
-            if (value>29996){
-            System.out.println(value);}
-            add(value);
+        if (avlTree != null) {
+            for (int value : avlTree) {
+                if (value > 29996) {
+                    System.out.println(value);
+                }
+                add(value);
 
-        }
+            }
         }
 
     }
@@ -90,19 +92,40 @@ public class AvlTree extends BinaryTree {
      */
     @Override
     public boolean delete(int toDelete) {
-        BinaryTreeNode currentNode = fatherOfElement(toDelete);
-        if (toDelete==17612){
-            System.out.println("ffff");//todo dooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+        BinaryTreeNode nodeToDelete = elementFinder(toDelete);
+        if (nodeToDelete == null) {
+            return false;
         }
-        boolean isDelete=super.delete(toDelete);
-        if (toDelete==17612){
-            System.out.println("ffff");//todo dooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
-        }
-            if (isDelete) {
+        BinaryTreeNode currentNode = nodeToDelete.getParent();
+        BinaryTreeNode rightDeleteChild = nodeToDelete.getRightChild();
+        BinaryTreeNode leftDeleteChild = nodeToDelete.getLeftChild();
+        BinaryTreeNode sucssesor = findSuccessor(nodeToDelete);
+        BinaryTreeNode sucssesorParent = findSuccessor(nodeToDelete);
+        BinaryTreeNode sucssesorChild = findSuccessor(nodeToDelete);
+        boolean isDelete = super.delete(toDelete);
+        if (isDelete) {
+            if (rightDeleteChild != null && leftDeleteChild != null) {
+                if (sucssesorChild != null) {
+                    balanceViolationChecker(sucssesorChild);
+                } else {
+                    if (sucssesorParent != null) {
+                        balanceViolationChecker(sucssesorParent);
+                    }
+                }
+                balanceViolationChecker(sucssesor);
+            } else if (rightDeleteChild != null ^ leftDeleteChild != null) {
+                if (rightDeleteChild != null) {
+                    balanceViolationChecker(rightDeleteChild);
+                } else {
+                    balanceViolationChecker(leftDeleteChild);
+                }
+            } else {
                 balanceViolationChecker(currentNode);
-                return true;
             }
+            return true;
+        }
         return false;
+
     }
 
     /*
@@ -112,7 +135,11 @@ public class AvlTree extends BinaryTree {
 
     private void balanceViolationChecker(BinaryTreeNode updatedNode) {
         BinaryTreeNode currentNode = updatedNode;
-        while (currentNode != null){
+        while (currentNode != null) {
+            System.out.println("fffyryryf" + temp++);//todo dooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+            if (temp > 400000) {
+                System.out.println("d");//todo ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+            }
             balanceTree(currentNode);
             currentNode = currentNode.getParent();
         }
@@ -135,7 +162,7 @@ public class AvlTree extends BinaryTree {
                 rorationToLeft(currentNode.getRightChild(), false);
             }
             rorationToLeft(currentNode, true);
-        } else if (violation>1)// if left violation
+        } else if (violation > 1)// if left violation
         {
             if (cheackViolation(currentNode.getLeftChild()) == -1) {
                 rorationToLeft(currentNode.getLeftChild(), true);
@@ -155,9 +182,9 @@ public class AvlTree extends BinaryTree {
     private void rorationToLeft(BinaryTreeNode binaryTreeNode, boolean isLeft) {
         BinaryTreeNode newFather;
         if (isLeft) {
-            newFather=binaryTreeNode.getRightChild();
+            newFather = binaryTreeNode.getRightChild();
         } else {
-            newFather=binaryTreeNode.getLeftChild();
+            newFather = binaryTreeNode.getLeftChild();
         }
         rotate(newFather, binaryTreeNode);
         binaryTreeNode.updateAncestorsDistanceToLeaf();
@@ -180,7 +207,6 @@ public class AvlTree extends BinaryTree {
         }
         return leftChildHeight - rightChildHeight;
     }
-
 
 
     /*  this function preforms the rotatin
@@ -296,34 +322,48 @@ public class AvlTree extends BinaryTree {
      * @return maximum number of nodes of height h
      */
     public static int findMaxNodes(int h) {
-        return (int) (Math.pow(2, h+1)-1);
+        return (int) (Math.pow(2, h + 1) - 1);
 
     }//TODO added new method
+
     public static void main(String[] args) {
-        Random random=new Random();
-        AvlTree avlTree=new AvlTree();
-        int size=0;
-        for (int i = 1; i <10; i++) {
-            try {
-                avlTree.add(i);
-                BTreePrinter.printNode(avlTree.root);
-                TimeUnit.SECONDS.sleep(1);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+        Random random = new Random();
+        AvlTree avlTree = new AvlTree();
+        int size = 0;
+        for (int i = 1; i < 15; i++) {
+            avlTree.add(i);
         }
-        for (int i = 0; i <10; i++) {
-            if (avlTree.contains(i)!=-1){
-                System.out.println(avlTree.contains(i)+"     :    "+i);
+        for (int i = 0; i < 10; i++) {
+            if (avlTree.contains(i) != -1) {
                 size++;
             }
         }
 
-        for (int i = 0; i <10 ; i++) {
-            avlTree.delete(i);
+        BTreePrinter.printNode(avlTree.root);
+        Scanner scanner=new Scanner(System.in);
+        for (int i = 0; i <15 ; i++) {
+            System.out.println("ffff");
+            int num=scanner.nextInt();
+            avlTree.delete(num);
+            BTreePrinter.printNode(avlTree.root);
+
         }
-        for (int i = 0; i <1000; i++) {
-            if (avlTree.contains(i)!=-1){
+
+
+//        for (int i = 0; i < 15; i++) {
+//            try {
+//                int num = random.nextInt(15);
+//                avlTree.delete(num);
+//                BTreePrinter.printNode(avlTree.root);
+//                System.out.println(num);
+//                TimeUnit.SECONDS.sleep(7);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//
+//        }
+        for (int i = 0; i < 1000; i++) {
+            if (avlTree.contains(i) != -1) {
                 size--;
             }
         }

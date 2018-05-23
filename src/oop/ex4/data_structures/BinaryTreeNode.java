@@ -74,25 +74,25 @@ class BinaryTreeNode {
         setDistance();
         if(parent==null){// if its the root
             return;
+        }else {
+            parent.updateAncestorsDistanceToLeaf();
         }
-        parent.ancestorsDistanceToLeaf();
-
     }
 
     /*
      * this function updates the current node biggest distance to leaf. then it recursively follows each
      * node from the node to the root, and updates it's biggestDistnaceToLeaf field.
      */
-    void ancestorsDistanceToLeaf()
-    {
-        int currentDistance=biggestDistanceToLeaf;
-        setDistance();
-        if (parent==null) //if biggest distance havn't changed, or its the root
-            {
-            return;
-        }
-        parent.ancestorsDistanceToLeaf();
-    }
+//    void ancestorsDistanceToLeaf()
+//    {
+//        int currentDistance=biggestDistanceToLeaf;
+//        setDistance();
+//        if (parent==null) //if biggest distance havn't changed, or its the root
+//        {
+//            return;
+//        }
+//        parent.ancestorsDistanceToLeaf();
+//    }
 
 
 
@@ -194,7 +194,10 @@ class BinaryTreeNode {
             return rightChild;
         }
     }
-
+    void setNullChilds(){
+        leftChild=null;
+        rightChild=null;
+    }
 
     /*
      * this function receives a node and sets it in it's right place as a child to our node. (if it has bigger

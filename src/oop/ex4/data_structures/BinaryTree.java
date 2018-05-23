@@ -180,15 +180,14 @@ abstract class BinaryTree implements Iterable<Integer> {
         if (root == null) {
             return false;
         }
-        if (toDelete == smallestNode.getValue()) {
+        if (toDelete == smallestNode.getValue()&&toDelete!=root.getValue()) {
             smallestNode = findSuccessor(smallestNode);
-        } else {
-            nodeToDelete = elementFinder(toDelete);
-        }
-        if (toDelete == root.getValue()) {
-            root = removeNode(root);
-            return true;
-        }
+        } else if (toDelete == smallestNode.getValue()&&toDelete==root.getValue()) {
+            root=null;
+            treeSize=0;
+        }else {
+                nodeToDelete = elementFinder(toDelete);
+            }
         if (nodeToDelete != null) {
             removeNode(nodeToDelete);
             return true;
@@ -198,20 +197,33 @@ abstract class BinaryTree implements Iterable<Integer> {
     }
 
     private BinaryTreeNode removeNode(BinaryTreeNode nodeToDelete) {
-        BinaryTreeNode fatherToDelet = nodeToDelete.getParent();
-        treeSize--;
+        BinaryTreeNode fatherToDelete = nodeToDelete.getParent();
         if (nodeToDelete.getLeftChild() == null || nodeToDelete.getRightChild() == null) {
             if (nodeToDelete.getLeftChild() == null ^ nodeToDelete.getRightChild() == null) {
                 BinaryTreeNode onlyChildOfToDelete = nodeToDelete.getChild();
                 replaceOnlyChild(nodeToDelete, onlyChildOfToDelete);
                 onlyChildOfToDelete.updateAncestorsDistanceToLeaf();
+                if (fatherToDelete==null){
+                    root=onlyChildOfToDelete;
+                    smallestNode=onlyChildOfToDelete;
+                }
+                treeSize--;
                 return onlyChildOfToDelete;
             } else {
-                if (fatherToDelet != null) {
-                    fatherToDelet.removeChild(nodeToDelete);
-                    fatherToDelet.updateAncestorsDistanceToLeaf();
-                    System.out.println("ffff");//todo dooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+                if (fatherToDelete != null) {
+                    fatherToDelete.removeChild(nodeToDelete);
+                    fatherToDelete.updateAncestorsDistanceToLeaf();
+                    System.out.println("fffpPpPpPpPf"+temp++);//todo dooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
                 }
+                if (nodeToDelete==smallestNode){
+                    if (fatherToDelete!=null){
+                        smallestNode=fatherToDelete;
+                    }else {
+                        smallestNode=null;
+                        root=null;
+                    }
+                }
+                treeSize--;
                 return null;
             }
         } else {
@@ -219,20 +231,23 @@ abstract class BinaryTree implements Iterable<Integer> {
                 System.out.println("ffff");//todo dooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
             }
             BinaryTreeNode nodeToReplace = findSuccessor(nodeToDelete);
-            BinaryTreeNode fatherNodeToReplace=nodeToReplace.getParent();
-            fatherNodeToReplace.removeChild(nodeToReplace);
-            fatherNodeToReplace.setChild(nodeToReplace.getChild());
-            replaceOnlyChild(nodeToDelete, nodeToReplace);
-            nodeToReplace.setChild(nodeToDelete.getLeftChild());
+            BinaryTreeNode fatherToReplace=nodeToReplace.getParent();
+            if (fatherToDelete!=null){
+                fatherToDelete.setChild(nodeToReplace);
+            }else {
+                nodeToReplace.setParent(null);
+                root=nodeToReplace;
+            }
+            fatherToReplace.setChild(nodeToDelete);
+
+            BinaryTreeNode nodeToReplaceChild=nodeToReplace.getChild();
             nodeToReplace.setChild(nodeToDelete.getRightChild());
-            if (fatherNodeToReplace.getRightChild()!=null) {
-                fatherNodeToReplace.getRightChild().setDistance();
-            }
-            if (fatherNodeToReplace.getLeftChild()!=null) {
-                fatherNodeToReplace.getLeftChild().setDistance();
-            }
-            fatherNodeToReplace.updateAncestorsDistanceToLeaf();
-            return nodeToReplace;
+            nodeToReplace.setChild(nodeToDelete.getLeftChild());
+            nodeToDelete.setNullChilds();
+            if (nodeToReplaceChild!=null){
+                nodeToDelete.setChild(nodeToReplaceChild);}
+            return removeNode(nodeToDelete);
+
         }
     }
 
