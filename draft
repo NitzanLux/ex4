@@ -1,0 +1,55 @@
+//        if (toDelete == smallestNode.getValue()) {
+//            smallestNode = findSuccessor(smallestNode);
+//            smallestNode.setLeftChild(null);
+//            treeSize--;
+//            return true;
+//        }
+//
+//        BinaryTreeNode fatherToDelete = fatherOfElement(toDelete);
+//        BinaryTreeNode nodeToDelete = getNextPath(fatherToDelete, toDelete);
+//        if (nodeToDelete != null) {
+//            if (nodeToDelete.getLeftChild() != null || nodeToDelete.getRightChild() != null) {
+//                if (nodeToDelete.getLeftChild() == null ^ nodeToDelete.getRightChild() == null) {
+//                    replaceOnlyChild(nodeToDelete, nodeToDelete.getChild());
+//                } else {
+//                    BinaryTreeNode replaceNode = findSuccessor(nodeToDelete);
+//                    if (replaceNode == null) {
+//                        return false;
+//                    }
+//                    replaceOnlyChild(nodeToDelete, replaceNode);
+//                    replaceNode.setChild(replaceNode.getRightChild());
+//                    replaceNode.setChild(replaceNode.getLeftChild());
+//                }
+//            } else {
+//                nodeToDelete.getParent().removeChild(nodeToDelete);
+//            }
+//            treeSize--;
+//            return true;
+//        }
+//        return false;
+
+
+
+
+    public static void main(String[] args) {
+        Random random=new Random();
+        AvlTree avlTree=new AvlTree();
+        int size=0;
+        for (int i = 0; i <10; i++) {
+            avlTree.add(i);
+        }
+        for (int i = 0; i <10; i++) {
+            if (avlTree.contains(i)!=-1){
+                size++;
+            }
+        }
+        for (int i = 0; i <10 ; i++) {
+            avlTree.delete(i);
+        }
+        for (int i = 0; i <1000; i++) {
+            if (avlTree.contains(i)!=-1){
+                size--;
+            }
+        }
+        System.out.println("ffffff");
+    }

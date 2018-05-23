@@ -33,7 +33,7 @@ class BinaryTreeNode {
      * a constant representing the default biggest distance from leaf of a node
      * (in case a node doesn't exists).
      */
-    private final int DEFAULT_DISTANCE_FROM_LEAF = -1;
+    private static final int DEFAULT_DISTANCE_FROM_LEAF = -1;
 
     /*
      * root constructor.
@@ -48,6 +48,7 @@ class BinaryTreeNode {
      */
     BinaryTreeNode(int value){
         this.value=value;
+        setDistance();
     }
     //TODO expleine its a leaf
 
@@ -60,6 +61,8 @@ class BinaryTreeNode {
     BinaryTreeNode(BinaryTreeNode parent, int value){
         this.value=value;
         this.parent=parent;
+        parent.setChild(this);
+        updateAncestorsDistanceToLeaf();
     }
 
     /*
