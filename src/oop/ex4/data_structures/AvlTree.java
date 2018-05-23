@@ -48,8 +48,14 @@ public class AvlTree extends BinaryTree {
      * @param avlTree - tree to be copied
      */
     AvlTree(BinaryTree avlTree) {
+        super();
+        if (avlTree!=null){
         for (int value : avlTree) {
-                add(value);
+            if (value>29996){
+            System.out.println(value);}
+            add(value);
+
+        }
         }
 
     }
@@ -83,29 +89,17 @@ public class AvlTree extends BinaryTree {
         BinaryTreeNode currentNode = fatherOfElement(toDelete);
         boolean isDelete=super.delete(toDelete);
         if (isDelete&&currentNode!=null) {
-            balanceViolationChecker(currentNode.getLeftChild());
-            balanceViolationChecker(currentNode.getRightChild());
+            balanceViolationChecker(currentNode);
             return true;
         }
         return false;
-    }
-
-    /**
-     * Does tree contain a given input value.
-     *
-     * @param searchVal - value to search for
-     * @return if val is found in the tree, return the depth of its node (where 0 is the root).
-     * Otherwise -- return -1.
-     */
-    @Override
-    public int contains(int searchVal) {
-        return super.contains(searchVal);
     }
 
     /*
      * this function checks for avl violations in the tree, and fixes them if found.
      * @param updatedNode - the node that have been changed (deleted/added)
      */
+
     private void balanceViolationChecker(BinaryTreeNode updatedNode) {
 
         BinaryTreeNode currentNode = updatedNode;
@@ -114,11 +108,11 @@ public class AvlTree extends BinaryTree {
             currentNode = currentNode.getParent();
         }
     }
-
     /*
      * this function receives a given node, and preform the balance operation on it (if needed)
      * @param currentNode - the given node to be balanced.
      */
+
     private void balanceTree(BinaryTreeNode currentNode) {
         int violation = cheackViolation(currentNode);
 
@@ -126,13 +120,13 @@ public class AvlTree extends BinaryTree {
         {
             return;
         }
-        if (violation < 0) {// if right violation
+        if (violation < 1) {// if right violation
             BinaryTreeNode rootNode = currentNode.getRightChild();
             if (cheackViolation(currentNode.getRightChild()) == 1) {
                 rorationToLeft(currentNode.getRightChild(), false);
             }
             rorationToLeft(currentNode, true);
-        } else // if left violation
+        } else if (violation>1)// if left violation
         {
             if (cheackViolation(currentNode.getLeftChild()) == -1) {
                 rorationToLeft(currentNode.getLeftChild(), true);
@@ -143,12 +137,12 @@ public class AvlTree extends BinaryTree {
 
 
     //TODO = what is rotation to left and rotation.
-
     /*
      * this function preforms a rotation to left  correction in an avl tree.
      * @param binaryTreeNode - the node to preform rotation on.
      * @param isLeft - boolean flag indicating if it's a right/left violation.
      */
+
     private void rorationToLeft(BinaryTreeNode binaryTreeNode, boolean isLeft) {
         if (isLeft) {
             rotate(binaryTreeNode.getRightChild(), binaryTreeNode);
@@ -162,7 +156,6 @@ public class AvlTree extends BinaryTree {
      * this function receives a node, and returns his violation factor.
      * @param currentNode - the node to be checked.
      */
-
     private int cheackViolation(BinaryTreeNode currentNode) {
         //setting default heights of sons before checking actual one
         int leftChildHeight = UNEXISTS_CHILD_BIGGEST_DISTANCE;
@@ -177,10 +170,10 @@ public class AvlTree extends BinaryTree {
     }
 
 
+
     /*  this function preforms the rotatin
      *
      */
-
     private void rotate(BinaryTreeNode child, BinaryTreeNode father) {//shouldweRemoveFather
         replaceOnlyChild(father, child);
         if (father == root) {
@@ -194,6 +187,18 @@ public class AvlTree extends BinaryTree {
         }
         father.setChild(childOfChildToFather);
         child.setChild(father);
+    }
+
+    /**
+     * Does tree contain a given input value.
+     *
+     * @param searchVal - value to search for
+     * @return if val is found in the tree, return the depth of its node (where 0 is the root).
+     * Otherwise -- return -1.
+     */
+    @Override
+    public int contains(int searchVal) {
+        return super.contains(searchVal);
     }
 
 
@@ -279,7 +284,8 @@ public class AvlTree extends BinaryTree {
      * @return maximum number of nodes of height h
      */
     public static int findMaxNodes(int h) {
-        return (int) (Math.pow(2, h) - 1);
+        return (int) (Math.pow(2, h+1)-1);
+
     }//TODO added new method
     public static void main(String[] args) {
         Random random=new Random();

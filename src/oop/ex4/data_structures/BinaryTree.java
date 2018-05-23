@@ -1,6 +1,7 @@
 package oop.ex4.data_structures;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 import static oop.ex4.data_structures.BTreePrinter.printNode;
 
@@ -153,14 +154,13 @@ abstract class BinaryTree implements Iterable<Integer> {
     int contains(int searchVal) {
         int depth = 0;
         BinaryTreeNode currentNode = root;
-        BinaryTreeNode newNode;
         while (currentNode != null) {
-            newNode = getNextPath(currentNode, searchVal);
-            if (newNode == currentNode) {
+            if (currentNode.getValue() ==searchVal ) //TOdo ---- .getValue()
+            {
                 return depth;
             }
+            currentNode = getNextPath(currentNode, searchVal);
             depth++;
-            currentNode = newNode;
         }
         return -1;
 
@@ -257,11 +257,13 @@ abstract class BinaryTree implements Iterable<Integer> {
      * @return the successor's node.
      */
     BinaryTreeNode findSuccessor(BinaryTreeNode baseNode) {
+        if (baseNode==null){
+            return null;
+        }
         BinaryTreeNode successor = minRight(baseNode);
         if (successor != null && successor.getValue() != baseNode.getValue()) {//if this is itself the minRight.
             return successor;
         }
-        successor = baseNode;
         while (successor.getParent() != null) {
             successor = successor.getParent();
             if (successor.getValue() > baseNode.getValue()) {
@@ -278,6 +280,9 @@ abstract class BinaryTree implements Iterable<Integer> {
      * @return the node that contains the minium value in the right subtree.
      */
     private BinaryTreeNode minRight(BinaryTreeNode baseNode) {
+        if (baseNode==null){
+            return null;
+        }
         BinaryTreeNode minRightNode = baseNode.getRightChild();
         if (minRightNode == null)  // if no right subtree exists
         {
@@ -310,17 +315,17 @@ abstract class BinaryTree implements Iterable<Integer> {
 
             @Override
             public boolean hasNext() {
-                return (currentNode != null);
+                return (currentNode!=null);
             }
 
             @Override
             public Integer next() {
-                if (hasNext()) {
+                if(hasNext()){
                     Integer valueToReturn = currentNode.getValue();
-                    currentNode = findSuccessor(currentNode);
+                    currentNode=findSuccessor(currentNode);
                     return valueToReturn;
                 } else {
-                    throw new IndexOutOfBoundsException();
+                    throw new NoSuchElementException();
                 }
             }
 

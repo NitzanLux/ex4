@@ -61,10 +61,13 @@ public class Tester_oop_ex4 {
 		for (int i = 0; i <= size / 2; i++) {
 			//this time a different prime
 			int x = (i * 6607) % size;
+
 			assertEquals("problem with depth of " + x, set.contains(x), tree.contains(x) >= 0);
+//			if (x==29998)
+//				System.out.println(set.contains(x)+"         :             "+secondTree.contains(x));
+//				System.out.println(secondTree.contains(x));
 			assertEquals("problem with depth of " + x, set.contains(x), secondTree.contains(x) >= 0);
 		}
-
 		Iterator<Integer> treeIter = tree.iterator();
 		Iterator<Integer> secondTreeIter = secondTree.iterator();
 		Iterator<Integer> setIter = set.iterator();
@@ -82,8 +85,13 @@ public class Tester_oop_ex4 {
 			assertEquals("problem with deletion of " + x, b, tree.delete(x));
 			assertEquals("problem with deletion of " + x, b, secondTree.delete(x));
 		}
+		System.out.println("ffffffffffffffffff");//todo aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 		assertEquals(set.size(), tree.size());
 		assertEquals(set.size(), secondTree.size());
+
+//		BTreePrinter printer = new BTreePrinter();
+//		printer.printNode(tree.root);
+
 	}
 
 	@Test
@@ -437,6 +445,9 @@ public class Tester_oop_ex4 {
 		}
 		for (Move move : testData) {
 			if (hashSet2.contains(move.data)) continue;
+			if (testData.id==5&&move.data==1){
+				System.out.println("Ffff");//todo ttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
+			}
 			errMsg = errMsgStart + "the depth of " + move.data + " should be " + move.depth + "...";
 			assertEquals(errMsg, move.depth, tree.contains(move.data));
 
