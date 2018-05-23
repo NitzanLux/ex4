@@ -53,3 +53,33 @@
         }
         System.out.println("ffffff");
     }
+
+
+
+
+//        BinaryTreeNode fatherToDelete= nodeToDelete.getParent();
+//        BinaryTreeNode fatherToReplace=nodeToReplace.getParent();
+//        if (nodeToDelete!=root){
+//            fatherToDelete.setChild(nodeToReplace);
+//        }else {
+//            nodeToReplace.setParent(null);
+//            root=nodeToReplace;
+//        }
+//        fatherToReplace.setLeftChild(nodeToDelete);
+//        nodeToDelete.setParent(fatherToReplace);
+//        BinaryTreeNode nodeToReplaceChild=nodeToReplace.getChild();
+//        if (nodeToDelete.getRightChild()!=nodeToReplace){
+//        nodeToReplace.setChild(nodeToDelete.getRightChild());
+//        }else {
+//            nodeToReplace.setRightChild(nodeToDelete);
+//        }
+//        nodeToReplace.setChild(nodeToDelete.getLeftChild());
+//        nodeToDelete.setNullChilds();
+//        if (nodeToReplaceChild!=null){
+//            nodeToDelete.setChild(nodeToReplaceChild);
+//        }
+//        if (nodeToDelete.getChild()!=null) {
+//            replaceOnlyChild(nodeToDelete, nodeToDelete.getChild());
+//        }else {
+//            nodeToDelete.getParent().setRightChild(null);
+//        }

@@ -156,7 +156,7 @@ abstract class BinaryTree implements Iterable<Integer> {
         int depth = 0;
         BinaryTreeNode currentNode = root;
         while (currentNode != null) {
-            if (currentNode.getValue() ==searchVal ) //TOdo ---- .getValue()
+            if (currentNode.getValue() ==searchVal )
             {
                 return depth;
             }
@@ -181,7 +181,7 @@ abstract class BinaryTree implements Iterable<Integer> {
             return false;
         }
         if (toDelete == smallestNode.getValue()&&toDelete!=root.getValue()) {
-            smallestNode = findSuccessor(smallestNode);
+            smallestNode = smallestNode.getParent();
         } else if (toDelete == smallestNode.getValue()&&toDelete==root.getValue()) {
             root=null;
             treeSize=0;
@@ -196,7 +196,7 @@ abstract class BinaryTree implements Iterable<Integer> {
 
     }
 
-    private BinaryTreeNode removeNode(BinaryTreeNode nodeToDelete) {
+    private void removeNode(BinaryTreeNode nodeToDelete) {
         BinaryTreeNode fatherToDelete = nodeToDelete.getParent();
         if (nodeToDelete.getLeftChild() == null || nodeToDelete.getRightChild() == null) {
             if (nodeToDelete.getLeftChild() == null ^ nodeToDelete.getRightChild() == null) {
@@ -208,12 +208,10 @@ abstract class BinaryTree implements Iterable<Integer> {
                     smallestNode=onlyChildOfToDelete;
                 }
                 treeSize--;
-                return onlyChildOfToDelete;
             } else {
                 if (fatherToDelete != null) {
                     fatherToDelete.removeChild(nodeToDelete);
                     fatherToDelete.updateAncestorsDistanceToLeaf();
-                    System.out.println("fffpPpPpPpPf"+temp++);//todo dooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
                 }
                 if (nodeToDelete==smallestNode){
                     if (fatherToDelete!=null){
@@ -224,33 +222,25 @@ abstract class BinaryTree implements Iterable<Integer> {
                     }
                 }
                 treeSize--;
-                return null;
             }
         } else {
-            if (nodeToDelete.getValue()==17612){
-                System.out.println("ffff");//todo dooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
-            }
-            BinaryTreeNode nodeToReplace = findSuccessor(nodeToDelete);
-            BinaryTreeNode fatherToReplace=nodeToReplace.getParent();
-            if (fatherToDelete!=null){
-                fatherToDelete.setChild(nodeToReplace);
-            }else {
-                nodeToReplace.setParent(null);
-                root=nodeToReplace;
-            }
-            fatherToReplace.setChild(nodeToDelete);
-
-            BinaryTreeNode nodeToReplaceChild=nodeToReplace.getChild();
-            nodeToReplace.setChild(nodeToDelete.getRightChild());
-            nodeToReplace.setChild(nodeToDelete.getLeftChild());
-            nodeToDelete.setNullChilds();
-            if (nodeToReplaceChild!=null){
-                nodeToDelete.setChild(nodeToReplaceChild);}
-            return removeNode(nodeToDelete);
-
+           removeNodeWithTwoSons(nodeToDelete);
         }
     }
+    private void removeNodeWithTwoSons(BinaryTreeNode nodeToDelete){
+         BinaryTreeNode nodeToReplace = findSuccessor(nodeToDelete);
+        if (nodeToDelete==root){
+            nodeToReplace=root;
+        }else {
+            nodeToDelete.getParent().setChild(nodeToReplace);
+        }
+        if (nodeToDelete.getRightChild()!=nodeToReplace){
+            nodeToReplace.getParent().setChild(nodeToReplace.getChild());
+            nodeToReplace.setChild(nodeToDelete.getRightChild());
+        }
+        nodeToReplace.setChild(nodeToDelete.getLeftChild());
 
+    }
 
     /*
      * this function receives

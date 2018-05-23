@@ -100,23 +100,23 @@ class BinaryTreeNode {
      *  biggestDistanceToLeaf fields in the right and left sons (if exists).
      */
     void setDistance(){
-        int biggestDistanseLeft = DEFAULT_DISTANCE_FROM_LEAF;
-        int biggestDistanseRight = DEFAULT_DISTANCE_FROM_LEAF;
+        int biggestDistanceLeft = DEFAULT_DISTANCE_FROM_LEAF;
+        int biggestDistanceRight = DEFAULT_DISTANCE_FROM_LEAF;
 
         if (rightChild!=null)  // if right child exists
         {
-            biggestDistanseRight=rightChild.biggestDistanceToLeaf;
+            biggestDistanceRight=rightChild.biggestDistanceToLeaf;
         }
         if (leftChild!=null) // if left child exists
         {
-            biggestDistanseLeft=leftChild.biggestDistanceToLeaf;
+            biggestDistanceLeft=leftChild.biggestDistanceToLeaf;
         }
 
-        if (biggestDistanseLeft>biggestDistanseRight)
+        if (biggestDistanceLeft>biggestDistanceRight)
         {
-            biggestDistanceToLeaf=biggestDistanseLeft+1; //adding also father node to the count
+            biggestDistanceToLeaf=biggestDistanceLeft+1; //adding also father node to the count
         }else {
-            biggestDistanceToLeaf=biggestDistanseRight+1; //adding also father node to the count
+            biggestDistanceToLeaf=biggestDistanceRight+1; //adding also father node to the count
         }
     }
 

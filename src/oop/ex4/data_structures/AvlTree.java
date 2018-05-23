@@ -1,11 +1,7 @@
 package oop.ex4.data_structures;
 
-import java.sql.Time;
 import java.util.Random;
 import java.util.Scanner;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.TimeUnit;
 
 /**
  * This class is the complete and tested implementation of an AVL-tree.
@@ -13,7 +9,8 @@ import java.util.concurrent.TimeUnit;
  * @author itamar108, nlux.
  */
 public class AvlTree extends BinaryTree {
-    //TODO CANOT BE PUBLIC
+
+
     /*a magic number representing a left-left violation */
     private static final int LL = 2;
     /*a magic number representing a right-left violation */
@@ -56,7 +53,7 @@ public class AvlTree extends BinaryTree {
         super();
         if (avlTree != null) {
             for (int value : avlTree) {
-                if (value > 29996) {
+                if (value > 29996) {        //TODO DELETTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
                     System.out.println(value);
                 }
                 add(value);
@@ -99,20 +96,20 @@ public class AvlTree extends BinaryTree {
         BinaryTreeNode currentNode = nodeToDelete.getParent();
         BinaryTreeNode rightDeleteChild = nodeToDelete.getRightChild();
         BinaryTreeNode leftDeleteChild = nodeToDelete.getLeftChild();
-        BinaryTreeNode sucssesor = findSuccessor(nodeToDelete);
-        BinaryTreeNode sucssesorParent = findSuccessor(nodeToDelete);
-        BinaryTreeNode sucssesorChild = findSuccessor(nodeToDelete);
+        BinaryTreeNode successor = findSuccessor(nodeToDelete);
+        BinaryTreeNode successorParent = findSuccessor(nodeToDelete);
+        BinaryTreeNode successorChild = findSuccessor(nodeToDelete);
         boolean isDelete = super.delete(toDelete);
         if (isDelete) {
             if (rightDeleteChild != null && leftDeleteChild != null) {
-                if (sucssesorChild != null) {
-                    balanceViolationChecker(sucssesorChild);
+                if (successorChild != null) {
+                    balanceViolationChecker(successorChild);
                 } else {
-                    if (sucssesorParent != null) {
-                        balanceViolationChecker(sucssesorParent);
+                    if (successorParent != null) {
+                        balanceViolationChecker(successorParent);
                     }
                 }
-                balanceViolationChecker(sucssesor);
+                balanceViolationChecker(successor);
             } else if (rightDeleteChild != null ^ leftDeleteChild != null) {
                 if (rightDeleteChild != null) {
                     balanceViolationChecker(rightDeleteChild);
@@ -150,7 +147,7 @@ public class AvlTree extends BinaryTree {
      */
 
     private void balanceTree(BinaryTreeNode currentNode) {
-        int violation = cheackViolation(currentNode);
+        int violation = checkViolation(currentNode);
 
         if (Math.abs(violation) <= 1) // if no violation
         {
@@ -158,16 +155,16 @@ public class AvlTree extends BinaryTree {
         }
         if (violation < -1) {// if right violation
             BinaryTreeNode rootNode = currentNode.getRightChild();
-            if (cheackViolation(currentNode.getRightChild()) == 1) {
-                rorationToLeft(currentNode.getRightChild(), false);
+            if (checkViolation(currentNode.getRightChild()) == 1) {
+                rotationToLeft(currentNode.getRightChild(), false);
             }
-            rorationToLeft(currentNode, true);
+            rotationToLeft(currentNode, true);
         } else if (violation > 1)// if left violation
         {
-            if (cheackViolation(currentNode.getLeftChild()) == -1) {
-                rorationToLeft(currentNode.getLeftChild(), true);
+            if (checkViolation(currentNode.getLeftChild()) == -1) {
+                rotationToLeft(currentNode.getLeftChild(), true);
             }
-            rorationToLeft(currentNode, false);
+            rotationToLeft(currentNode, false);
         }
     }
 
@@ -179,7 +176,7 @@ public class AvlTree extends BinaryTree {
      * @param isLeft - boolean flag indicating if it's a right/left violation.
      */
 
-    private void rorationToLeft(BinaryTreeNode binaryTreeNode, boolean isLeft) {
+    private void rotationToLeft(BinaryTreeNode binaryTreeNode, boolean isLeft) {
         BinaryTreeNode newFather;
         if (isLeft) {
             newFather = binaryTreeNode.getRightChild();
@@ -195,7 +192,7 @@ public class AvlTree extends BinaryTree {
      * this function receives a node, and returns his violation factor.
      * @param currentNode - the node to be checked.
      */
-    private int cheackViolation(BinaryTreeNode currentNode) {
+    private int checkViolation(BinaryTreeNode currentNode) {
         //setting default heights of sons before checking actual one
         int leftChildHeight = UNEXISTS_CHILD_BIGGEST_DISTANCE;
         int rightChildHeight = UNEXISTS_CHILD_BIGGEST_DISTANCE;
@@ -314,6 +311,10 @@ public class AvlTree extends BinaryTree {
         int fibonacciHplusOne = (int) ((1 / sqrt5) * (Math.pow((1 + sqrt5) / 2, h + 3) - Math.pow((1 - sqrt5) / 2, h + 3)));
         return fibonacciHplusOne - 1;
     }//TODO added new method. refactor names
+
+
+
+
 
     /**
      * A method that calculates the maximum number of nodes in an AVL tree of height h,
