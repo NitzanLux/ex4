@@ -9,13 +9,20 @@ import static oop.ex4.data_structures.BTreePrinter.printNode;
  */
 
 
+
+//TODO - WHAT THE FUCK IS GOING ON WITH THE CLASSIFICATION OF FUNCTION. SOME PUBLIC, SOME PRIVATE, SOME DEFAULT. WE NEED TO CHECK IT.
+
+
 abstract class BinaryTree {
 
     BinaryTreeNode smallestNode;
     BinaryTreeNode root;
     private int treeSize = 0;
 
-
+    /*
+     * constructor from an array. buiilds a tree based of the values given in the array.
+     * @param data -  an array of value typed int.
+     */
     BinaryTree(int[] data) {
         for (int value : data) {
             add(value);
@@ -27,10 +34,17 @@ abstract class BinaryTree {
     }
 
 
+    /*
+     * this function searches for a given value in a tree, and if found it returns it's father.
+     * @param searchVal - the value to search.
+     * @return the father if exists. null otherwise.
+     */
     BinaryTreeNode fatherOfElement(int searchVal) {
         BinaryTreeNode nextPath = root;
         BinaryTreeNode lastPath = root;
-        while (nextPath != null && nextPath.getValue() != searchVal) {
+        // while we haven't reached null and havn't found our value already in the tree.
+        while (nextPath != null && nextPath.getValue() != searchVal)
+        {
             lastPath = nextPath;
             nextPath = getNextPath(lastPath, searchVal);
         }
@@ -38,9 +52,10 @@ abstract class BinaryTree {
     }
 
 
+    //tODO ==== SHOULD NOT BE PUBLIC
+
     /**
      * Add a new node with key newValue into the tree.
-     *
      * @param newValue - new value to add to the tree.
      * @return - false if newValue already exist in the tree
      */
@@ -59,6 +74,8 @@ abstract class BinaryTree {
     }
 
 
+
+    //todo - deleted gray parts.
     /*
      * this function receives an appropriate father (using getNextPath method),
      * and a value to insert to the tree, and puts the value
@@ -75,6 +92,7 @@ abstract class BinaryTree {
         BinaryTreeNode son = new BinaryTreeNode(father, newValue);
         father.setChild(son);
         son.updateAncestorsDistanceToLeaf();
+
 //            if (father.getValue() < newValue) {
 //                father.setRightChild(son);
 //            } else if (father.getValue() > newValue) {
@@ -127,7 +145,7 @@ abstract class BinaryTree {
      *
      * @param searchVal - value to search for
      * @return if val is found in the tree, return the depth of its node (where 0 is the root).
-     * Otherwise -- return -1.
+     * Otherwise return -1.
      */
      int contains(int searchVal) {
         int depth = 0;
@@ -144,6 +162,8 @@ abstract class BinaryTree {
         return -1;
 
     }
+
+    //TODO SHOULD NOT BE PUBLIC
 
     /**
      * Remove a node from the tree, if it exists.
@@ -182,6 +202,15 @@ abstract class BinaryTree {
         return false;
     }
 
+
+    /*
+     * this function receives
+     * @param nodeToReplace
+     * @param replaceNode
+     */
+
+    //TODO WHAT IS THIS NAME - REPLACE NODE/NODE TO REPLACE. WE NEED TO CHANGE IT.
+
     void replaceOnlyChild(BinaryTreeNode nodeToReplace, BinaryTreeNode replaceNode) {
         BinaryTreeNode nodeToReplaceParent=nodeToReplace.getParent();
         {
@@ -202,9 +231,15 @@ abstract class BinaryTree {
     }
 
 
+    /*
+     * this function finds the successor (when values in ascending order) to a given node in the tree, and returns
+     * it's node, if found.
+     * @param baseNode - the node to checks for it's successor.
+     * @return the successor's node.
+     */
     BinaryTreeNode findSuccessor(BinaryTreeNode baseNode) {
         BinaryTreeNode successor = minRight(baseNode);
-        if (successor != null&& successor.getValue()!=baseNode.getValue()) {//if itself the minRight.
+        if (successor != null&& successor.getValue()!=baseNode.getValue()) {//if this is itself the minRight.
             return successor;
         }
         successor = baseNode;
@@ -217,9 +252,16 @@ abstract class BinaryTree {
         return null;
     }
 
+
+    /*
+     * this function receives a node and returns the minimum value Node in it's right subtree.
+     * @param baseNode - the given node.
+     * @return the node that contains the minium value in the right subtree.
+     */
     private BinaryTreeNode minRight(BinaryTreeNode baseNode) {
         BinaryTreeNode minRightNode = baseNode.getRightChild();
-        if (minRightNode == null) {
+        if (minRightNode == null)  // if no right subtree exists
+        {
             return baseNode;
         }
         while (minRightNode.getLeftChild() != null) {
@@ -236,7 +278,12 @@ abstract class BinaryTree {
         return treeSize;
     }//TODO no pablic overide
 
+    //TODO documents the iterator.
 
+    /**
+     * this function creates the iterator for binarytree.
+     * @return an iterator.
+     */
     public java.util.Iterator<java.lang.Integer> iterator() {//TODO no pablic overide
         return new Iterator<Integer>() {
             private BinaryTreeNode currentNode=smallestNode;

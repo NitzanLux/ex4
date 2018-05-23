@@ -5,14 +5,30 @@ import java.util.Iterator;
 /**
  * This class is the complete and tested implementation of an AVL-tree.
  *
- * @author itamar108 nlux.
+ * @author itamar108, nlux.
  */
 public class AvlTree extends BinaryTree{
+
+    //TODO CANOT BE PUBLIC
+
+    /*a magic number representing a left-left violation */
     public static final int LL = 2;
+    /*a magic number representing a right-left violation */
     public static final int RL = 1;
+    /*a magic number representing a right-right violation */
     public static final int RR = -2;
+    /*a magic number representing a left-right violation */
     public static final int LR = -1;
+
+
+
     int temp=0;//TODO;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+    /*
+     * a constant representing the biggest distance to leaf of an un-exsisted node in an avl tree (-1).
+     */
+    private static final int UNEXISTS_CHILD_BIGGEST_DISTANCE = -1;
+
     /**
      * A default constructor.
      */
@@ -90,11 +106,11 @@ public class AvlTree extends BinaryTree{
     public int contains(int searchVal) {
         return super.contains(searchVal);
     }
+
     /*
-     * this function checks for avl violations in the tree, and fixes them if founds.
+     * this function checks for avl violations in the tree, and fixes them if found.
      * @param updatedNode - the node that have been changed (deleted/added)
      */
-
     private void balanceVoilationChecker(BinaryTreeNode updatedNode){
         BinaryTreeNode currentNode=updatedNode;
         do {
@@ -102,24 +118,41 @@ public class AvlTree extends BinaryTree{
             currentNode = currentNode.getParent();
         }while (currentNode!=null);
     }
+
+    /*
+     * this function receives a given node, and preform the balance operation on it (if needed)
+     * @param currentNode - the given node to be balanced.
+     */
     private void balanceTree(BinaryTreeNode currentNode){
         int violation=cheackViolation(currentNode);
-        if (Math.abs(violation)<=1){
+
+        if (Math.abs(violation)<=1) // if no violation
+        {
             return;
         }
-        if (violation<0){//right violation
+        if (violation<0){// if right violation
             BinaryTreeNode rootNode=currentNode.getRightChild();
             if (cheackViolation(currentNode.getRightChild())==1){
                 rorationToLeft(currentNode.getRightChild(),false);
             }
             rorationToLeft(currentNode,true);
-        }else {
+        }else // if left violation
+            {
             if (cheackViolation(currentNode.getLeftChild())==-1){
                 rorationToLeft(currentNode.getLeftChild(),true);
             }
             rorationToLeft(currentNode,false);
         }
     }
+
+
+    //TODO = what is rotation to left and rotation.
+
+    /*
+     * this function preforms a rotation to left  correction in an avl tree.
+     * @param binaryTreeNode - the node to preform rotation on.
+     * @param isLeft - boolean flag indicating if it's a right/left violation.
+     */
     private void rorationToLeft(BinaryTreeNode binaryTreeNode,boolean isLeft){
         if (isLeft){
             rotate(binaryTreeNode.getRightChild(),binaryTreeNode);
@@ -128,12 +161,16 @@ public class AvlTree extends BinaryTree{
         }
         binaryTreeNode.updateAncestorsDistanceToLeaf();
     }
+
     /*
-    * return violation left-right
+     * this function receives a node, and returns his violation factor.
+     * @param currentNode - the node to be checked.
      */
+
     private int cheackViolation(BinaryTreeNode currentNode){
-        int leftChildHeight=-1;
-        int rightChildHeight=-1;
+        //setting default heights of sons before checking actual one
+        int leftChildHeight= UNEXISTS_CHILD_BIGGEST_DISTANCE;
+        int rightChildHeight= UNEXISTS_CHILD_BIGGEST_DISTANCE;
         if (currentNode.getRightChild()!=null){
             rightChildHeight=currentNode.getRightChild().getBiggestDistanceToLeaf();
         }
@@ -142,6 +179,11 @@ public class AvlTree extends BinaryTree{
         }
         return leftChildHeight-rightChildHeight;
     }
+
+
+    /*  this function preforms the rotatin
+     *
+     */
 
     private void rotate(BinaryTreeNode child, BinaryTreeNode father){//shouldweRemoveFather
         replaceOnlyChild(father,child);
