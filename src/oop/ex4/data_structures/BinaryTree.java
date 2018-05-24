@@ -270,7 +270,13 @@ abstract class BinaryTree implements Iterable<Integer> {
         }else {
             nodeToDeleteParent.setChild(nodeToReplace);
         }
-        nodeToReplaceParent.updateAncestorsDistanceToLeaf();
+        if (nodeToReplaceChild!=null){
+            nodeToReplaceChild.updateAncestorsDistanceToLeaf();
+        }else if (nodeToReplaceParent!= nodeToDelete){
+            nodeToReplaceParent.updateAncestorsDistanceToLeaf();
+        }else{
+            nodeToReplace.updateAncestorsDistanceToLeaf();
+        }
 
 
     }

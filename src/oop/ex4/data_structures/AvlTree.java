@@ -306,7 +306,7 @@ public class AvlTree extends BinaryTree {
         Random random = new Random();
         AvlTree avlTree = new AvlTree();
         int size = 0;
-        for (int i = 1; i <30; i++) {
+        for (int i = 1; i <17; i++) {
             avlTree.add(i);
         }
         for (int i = 0; i < 10; i++) {

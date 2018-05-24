@@ -445,6 +445,9 @@ public class Tester_oop_ex4 {
 				System.out.printf("itamer is my bitch");
 			}
 			assertEquals(errMsg, hashSet.size(), tree.size());
+			if (testData.id==18 && move.data==5) {
+				System.out.println("fbolabolabola");
+			}
 		}
 		for (Move move : testData) {
 			if (hashSet2.contains(move.data)) continue;
