@@ -8,7 +8,7 @@ import java.util.NoSuchElementException;
  */
 
 
-//TODO - WHAT THE FUCK IS GOING ON WITH THE CLASSIFICATION OF FUNCTION. SOME PUBLIC, SOME PRIVATE, SOME DEFAULT. WE NEED TO CHECK IT.
+
 
 
 abstract class BinaryTree implements Iterable<Integer> {
@@ -341,7 +341,10 @@ abstract class BinaryTree implements Iterable<Integer> {
             return null;
         }
         BinaryTreeNode successor = minRight(baseNode);
-        if (successor != null && successor.getValue() != baseNode.getValue()) {//if this is itself the minRight.
+        if (successor==null){
+            return null;
+        }
+        if ( successor.getValue() != baseNode.getValue()) {//if this is itself the minRight.
             return successor;
         }
         while (successor.getParent() != null) {
@@ -387,7 +390,7 @@ abstract class BinaryTree implements Iterable<Integer> {
      * this function creates and returns an Integers iterator for binarytree.
      * @return an Integers iterator for our tree.
      */
-    public java.util.Iterator<java.lang.Integer> iterator() {//TODO no pablic overide
+    public java.util.Iterator<java.lang.Integer> iterator() {
         return new Iterator<Integer>() {
             /*the current node pointer*/
             private BinaryTreeNode currentNode = smallestNode;

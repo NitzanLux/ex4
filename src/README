@@ -48,24 +48,24 @@ will follow).
    add METHOD -
    as explained, some of the action in an Avl tree are indentical to the ones in BST.
    therefore, our add method was implemented as follows: first we preformed a BST add procedure
-   which was implemented in BST class, and was called by "super". then, because it's an AVL tree, we made
+   which was implemented in BST class. then, because it's an AVL tree, we made
    sure the tree is balaned, and corrected it if not.
    for that we used several functions, which some received as input the node that have been added:
 
-   balanceViolationChecker - which checks for an AVL violation in all nodes, and balances the tree if so.
+   treeViolationChecker - which checks for an AVL violation from node to ancestors, and balances the tree if so.
 
    checkViolation - which checks for a violation in a given node.
 
    balanceTree - which in case a violation was found makes the appropriate rotation to correct the tree.
 
-   rotationToLeft - which rotates the tree at a given node to the left
+   rotationToLeft - which rotates the tree at a given node to the left.
 
-   rotation - which rotates the tree
+   rotation - which rotates the father node and parent node.
 
 
     delete Method -
-    same as add, the basic operation (without the balancing) was done and implemented in the BST class,
-    and was called by super. after that, we preformed balance using the all function mentioned above,
+    same as add, the basic operation (without the balancing) was done and implemented in the BST class.
+    after that, we preformed a tree balance if needed using the all function mentioned above,
     this time by giving them as parameter the node that have been deleted.
 
 
@@ -74,7 +74,7 @@ will follow).
 =============================
 
 5.1
-        1. [ 5,2,8,1,10,3,7,4,6,9,11,12]
+        1. [5,2,8,1,10,3,7,4,6,9,11,12]
 
 
 5.2
@@ -87,11 +87,10 @@ will follow).
     tree. so infact i in our case runs from 1 to n (1<=i<=n), and additions are actually:
     O(log 1), O(log 2, ... ,O(log n).so our running time at the worst case is O(n*logn).
 
-    2. the best running time is when no corrections in the tree are needed, and as we described in
-    ex4 part 1, question 1.b in DAST, this can be done in O(n),
-    when we sort the array (O(n)) and set the root as the median of the sorted array etc.
-    less than that could not be possible,
-    since our array's length is n, and that would mean we didn't reviewed all elements in it.
+    2. the best running time is as we described in ex4 part 1, question 1.b in DAST, is O(n).
+    this can be done when we sort the array (O(n)) and set the root as the median of the sorted array etc.
+    less than that could not be possible, since our array's length is n, and that would mean we didn't reviewed all
+    elements in it.
 
 
 
@@ -116,7 +115,7 @@ will follow).
 
 5.4
     1. the asymptotic running time complexity of our implementation of the opreation, is O(1). to do so we used
-    the fibonacci formula. and so, other than math calculation (which are O(1) obviously) we havn't done any
+    the fibonacci formula. and so, other than math calculation (which are O(1) obviously) we haven't done any
     iterations, and the run time is O(1).
 
     2. obviously this is the best run time asymptotic bound we can found (could not be better than O(1)).
