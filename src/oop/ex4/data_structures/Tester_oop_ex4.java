@@ -82,12 +82,8 @@ public class Tester_oop_ex4 {
 		for (int i = 0; i <= size / 2; i++) {
 			int x = (i * 1153) % size;
 			boolean b = set.remove(x);
-			if (x==17612){
-				System.out.println(b);//todo dooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
-			}
 			assertEquals("problem with deletion of " + x, b, tree.delete(x));
 			assertEquals("problem with deletion of " + x, b, secondTree.delete(x));
-			System.out.println(x);//todo aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 		}
 		assertEquals(set.size(), tree.size());
 		assertEquals(set.size(), secondTree.size());
@@ -134,7 +130,6 @@ public class Tester_oop_ex4 {
 			assertEquals("problem with deletion of " + x, b, secondTree.delete(x));
 
 		}
-		System.out.println("fffffffffOoOoOoOoO");
 		assertEquals(set.size(), tree.size());
 		assertEquals(set.size(), secondTree.size());
 	}
@@ -429,30 +424,36 @@ public class Tester_oop_ex4 {
 		AvlTree tree = new AvlTree();
 		HashSet<Integer> hashSet = new HashSet<>();
 		HashSet<Integer> hashSet2 = new HashSet<>();
-
 		errMsg = errMsgStart + "the size of the tree should be " + hashSet.size() + "...";
 		assertEquals(errMsg, hashSet.size(), tree.size());
 		for (Move move : testData) {
+
 			switch (move.type) {
 				case Move.ADD:
-					System.out.println();
-					if (testData.id==5){
-						System.out.println("Ffff");//todo ttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
-					}
 					errMsg = errMsgStart + "trying to add " + move.data + "...";
 					assertEquals(errMsg, hashSet.add(move.data), tree.add(move.data));
 					break;
 				case Move.DELETE:
+
+					boolean bool= tree.delete(move.data);
 					errMsg = errMsgStart + "trying to delete " + move.data + "...";
-					assertEquals(errMsg, hashSet.remove(move.data), tree.delete(move.data));
+					assertEquals(errMsg, hashSet.remove(move.data), bool);
 					break;
 			}
 			errMsg = errMsgStart + "the size of the tree should be " + hashSet.size() + "...";
+			if (testData.id==12&&tree.size()!=hashSet.size()){
+				System.out.printf("itamer is my bitch");
+			}
 			assertEquals(errMsg, hashSet.size(), tree.size());
 		}
 		for (Move move : testData) {
 			if (hashSet2.contains(move.data)) continue;
-
+			if (testData.id==18 && move.data==5) {
+				System.out.println("fbolabolabola");
+			}
+			BTreePrinter.printNode(tree.root);
+			int deptt=tree.contains(move.data);
+			deptt=tree.contains(move.data);
 			errMsg = errMsgStart + "the depth of " + move.data + " should be " + move.depth + "...";
 			assertEquals(errMsg, move.depth, tree.contains(move.data));
 

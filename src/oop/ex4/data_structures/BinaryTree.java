@@ -17,7 +17,6 @@ abstract class BinaryTree implements Iterable<Integer> {
     BinaryTreeNode smallestNode;
     BinaryTreeNode root;
     private int treeSize = 0;
-    int temp=0 ;//todo oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
 
     /*
      * constructor from an array. buiilds a tree based of the values given in the array.
@@ -32,6 +31,21 @@ abstract class BinaryTree implements Iterable<Integer> {
     }
 
     BinaryTree() {
+    }
+
+    /*
+     * A copy-constructor that builds the tree from existing tree
+     *
+     * @param binaryTree - tree to be copied
+     */
+    BinaryTree(BinaryTree binaryTree) {
+        if (binaryTree != null) {
+            for (int value : binaryTree) {
+                add(value);
+
+            }
+        }
+
     }
 
     /*
@@ -68,8 +82,7 @@ abstract class BinaryTree implements Iterable<Integer> {
         }
         if (smallestNode != null && smallestNode.getValue() >= newValue) {
             if (smallestNode.getValue() > newValue) {
-                BinaryTreeNode newChild = new BinaryTreeNode(smallestNode, newValue);
-                smallestNode=newChild;
+                smallestNode= new BinaryTreeNode(smallestNode, newValue);
                 treeSize++;
                 return true;
             }
@@ -183,13 +196,20 @@ abstract class BinaryTree implements Iterable<Integer> {
         if (toDelete == smallestNode.getValue()&&toDelete!=root.getValue()) {
             smallestNode = smallestNode.getParent();
         } else if (toDelete == smallestNode.getValue()&&toDelete==root.getValue()) {
-            root=null;
-            treeSize=0;
+            root=root.getChild();
+            smallestNode=smallestNode.getChild();
+            if (root==null){
+                treeSize=0;
+            }else {
+            treeSize--;
+            }
+            return true;
         }else {
                 nodeToDelete = elementFinder(toDelete);
             }
         if (nodeToDelete != null) {
             removeNode(nodeToDelete);
+            treeSize--;
             return true;
         }
         return false;
@@ -201,13 +221,13 @@ abstract class BinaryTree implements Iterable<Integer> {
         if (nodeToDelete.getLeftChild() == null || nodeToDelete.getRightChild() == null) {
             if (nodeToDelete.getLeftChild() == null ^ nodeToDelete.getRightChild() == null) {
                 BinaryTreeNode onlyChildOfToDelete = nodeToDelete.getChild();
-                replaceOnlyChild(nodeToDelete, onlyChildOfToDelete);
-                onlyChildOfToDelete.updateAncestorsDistanceToLeaf();
-                if (fatherToDelete==null){
+                if (nodeToDelete==root){
                     root=onlyChildOfToDelete;
                     smallestNode=onlyChildOfToDelete;
+                }else {
+                    replaceOnlyChild(nodeToDelete, onlyChildOfToDelete);
                 }
-                treeSize--;
+                onlyChildOfToDelete.updateAncestorsDistanceToLeaf();
             } else {
                 if (fatherToDelete != null) {
                     fatherToDelete.removeChild(nodeToDelete);
@@ -221,7 +241,6 @@ abstract class BinaryTree implements Iterable<Integer> {
                         root=null;
                     }
                 }
-                treeSize--;
             }
         } else {
            removeNodeWithTwoSons(nodeToDelete);

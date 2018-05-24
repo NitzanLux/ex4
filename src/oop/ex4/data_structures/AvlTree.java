@@ -49,20 +49,9 @@ public class AvlTree extends BinaryTree {
      *
      * @param avlTree - tree to be copied
      */
-    AvlTree(BinaryTree avlTree) {
-        super();
-        if (avlTree != null) {
-            for (int value : avlTree) {
-                if (value > 29996) {        //TODO DELETTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-                    System.out.println(value);
-                }
-                add(value);
-
-            }
-        }
-
+    AvlTree(AvlTree avlTree) {
+        super(avlTree);
     }
-
 
     /**
      * Add a new node with key newValue into the tree.
@@ -94,9 +83,6 @@ public class AvlTree extends BinaryTree {
             return false;
         }
         BinaryTreeNode nodeToDeleteParent=nodeToDelete.getParent();
-        if (nodeToDelete == null) {
-            return false;
-        }
         boolean hadChild=true;
         if (nodeToDelete.getChild()==null){
             hadChild=false;
@@ -105,7 +91,7 @@ public class AvlTree extends BinaryTree {
         boolean isDelete = super.delete(toDelete);
         if (isDelete) {
             if (hadChild){
-            if (successor.getRightChild()!=null){
+            if (successor!=null&&successor.getRightChild()!=null){
                 successor=findSuccessor(successor);
             }
             balanceViolationChecker(successor);
@@ -126,10 +112,6 @@ public class AvlTree extends BinaryTree {
     private void balanceViolationChecker(BinaryTreeNode updatedNode) {
         BinaryTreeNode currentNode = updatedNode;
         while (currentNode != null) {
-            System.out.println("fffyryryf" + temp++);//todo dooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
-            if (temp > 400000) {
-                System.out.println("d");//todo ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
-            }
             balanceTree(currentNode);
             currentNode = currentNode.getParent();
         }
@@ -324,7 +306,7 @@ public class AvlTree extends BinaryTree {
         Random random = new Random();
         AvlTree avlTree = new AvlTree();
         int size = 0;
-        for (int i = 1; i < 15; i++) {
+        for (int i = 1; i <30; i++) {
             avlTree.add(i);
         }
         for (int i = 0; i < 10; i++) {
@@ -336,7 +318,6 @@ public class AvlTree extends BinaryTree {
         BTreePrinter.printNode(avlTree.root);
         Scanner scanner=new Scanner(System.in);
         for (int i = 0; i <15; i++) {
-            System.out.println("ffff");
             int num=scanner.nextInt();
             avlTree.delete(num);
             BTreePrinter.printNode(avlTree.root);
@@ -361,7 +342,6 @@ public class AvlTree extends BinaryTree {
                 size--;
             }
         }
-        System.out.println("ffffff");
     }
 
 }
