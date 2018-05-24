@@ -1,0 +1,124 @@
+nlux, itamar108
+
+
+
+
+=============================
+=      File description     =
+=============================
+
+in this project are the implementation of an Avl tree, which is in fact a binary tree.
+
+1. BinaryTreeNode.java - contains the implementation of a node in a binary search tree. this node has
+several fields (parent, left/right child, and value).
+
+2. BinaryTree.java - abstract class containing the implementation of a binary search tree.
+this tree consists of binaryTreeNode objects.
+
+3. AvlTree.java - contains the implementation of an AVL typed tree, which is in fact a binary search tree
+with balance mechanism. therefore it extends BinaryTree class.
+
+
+=============================
+=          Design           =
+=============================
+
+as explained down.
+
+=============================
+=  Implementation details   =
+=============================
+
+
+1. as mentioned in the file description, we took a look into the tree hierarchy:
+since the AVL tree is actually a BST (binary search tree) with balance mechanism, we decide to first
+implement an abstract class representing a binary search tree.
+in order to create the BST implementation, we decided to implement a single node in the tree in a
+BinaryTreeNode class. this node contains several field, such as left child, right child, parent, and value.
+and so, our BST implementation will in fact be a tree consisted of BinaryTreeNode objects.
+in the Bst class we implemented several actions as defined in binary search trees, such as add, delete,(
+a deeper explanation on these shall follow), contains, etc.
+then, as the definition of avl requires, we created an AvlTree class (which implements the AVL tree),
+that extends BinarySearchTree. it partly uses the methods of binary search tree, as explains in DAST,
+and balances the tree when needed with it's own special methods - (explanation on these method and uses
+will follow).
+
+2.
+
+   add METHOD -
+   as explained, some of the action in an Avl tree are indentical to the ones in BST.
+   therefore, our add method was implemented as follows: first we preformed a BST add procedure
+   which was implemented in BST class, and was called by "super". then, because it's an AVL tree, we made
+   sure the tree is balaned, and corrected it if not.
+   for that we used several functions, which some received as input the node that have been added:
+
+   balanceViolationChecker - which checks for an AVL violation in all nodes, and balances the tree if so.
+
+   checkViolation - which checks for a violation in a given node.
+
+   balanceTree - which in case a violation was found makes the appropriate rotation to correct the tree.
+
+   rotationToLeft - which rotates the tree at a given node to the left
+
+   rotation - which rotates the tree
+
+
+    delete Method -
+    same as add, the basic operation (without the balancing) was done and implemented in the BST class,
+    and was called by super. after that, we preformed balance using the all function mentioned above,
+    this time by giving them as parameter the node that have been deleted.
+
+
+=============================
+=    Answers to questions   =
+=============================
+
+5.1
+        1. [ 5,2,8,1,10,3,7,4,6,9,11,12]
+
+
+5.2
+
+1.
+    the asymptotic running time complexity of the tree construction in AvlTree(int[]data) is O(nlogn),
+    when n represents the length of the array.
+    First, we run over the array, which is O(n). then, we add each cell to the tree:
+    as learned in DAST, addition in AVL costs us O(log(i)) when i represents the number of elements in the
+    tree. so infact i in our case runs from 1 to n (1<=i<=n), and additions are actually:
+    O(log 1), O(log 2, ... ,O(log n).so our running time at the worst case is O(n*logn).
+
+    2. the best running time is when no corrections in the tree are needed, and as we described in
+    ex4 part 1, question 1.b in DAST, this can be done in O(n),
+    when we sort the array (O(n)) and set the root as the median of the sorted array etc.
+    less than that could not be possible,
+    since our array's length is n, and that would mean we didn't reviewed all elements in it.
+
+
+
+5.3
+
+1. the asymptotic running time complexity of the tree construction in AvlTree(AvlTree avlTree) is: O(nlogn).
+    for this function we use the successor method over the given avl tree, for each element we want to copy
+    in it. as we proved in ex4 in DAST, the successor run time is when iterating over all of the tree nodes
+    is O(n). then we will add each of the values the successor will give us to the tree, which will costs us
+    O(log n), as explained above. and so, totaly we will have an asymptotic O(nlogn) run time.
+
+
+2. the best possible run time complexity is (as we proved in dast ex4) O(n). as we proved, this could be
+    reached in the following way:
+    first we operates successor for all the elements - which is O(n) as explained - and put each value
+    in an array at their output order.
+    this way we will have a sorted array, size n.
+    then we will iterate over that array, inserting one element at a time. as we answered in the
+    previous question, this could be done at best possible time of O(n).
+    an so we wiil have total runtime of O(n+n) = O(n).
+
+
+5.4
+    1. the asymptotic running time complexity of our implementation of the opreation, is O(1). to do so we used
+    the fibonacci formula. and so, other than math calculation (which are O(1) obviously) we havn't done any
+    iterations, and the run time is O(1).
+
+    2. obviously this is the best run time asymptotic bound we can found (could not be better than O(1)).
+
+

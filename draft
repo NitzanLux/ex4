@@ -54,7 +54,37 @@
         System.out.println("ffffff");
     }
 
+---
 
+    public static void main(String[] args) {
+        Random random = new Random();
+        AvlTree avlTree = new AvlTree();
+        int size = 0;
+        for (int i = 1; i <17; i++) {
+            avlTree.add(i);
+        }
+        for (int i = 0; i < 10; i++) {
+            if (avlTree.contains(i) != -1) {
+                size++;
+            }
+        }
+
+        BTreePrinter.printNode(avlTree.root);
+        Scanner scanner=new Scanner(System.in);
+        for (int i = 0; i <15; i++) {
+            int num=scanner.nextInt();
+            avlTree.delete(num);
+            BTreePrinter.printNode(avlTree.root);
+
+        }
+
+        for (int i = 0; i < 1000; i++) {
+            if (avlTree.contains(i) != -1) {
+                size--;
+            }
+        }
+    }
+---
 
 
 //        BinaryTreeNode fatherToDelete= nodeToDelete.getParent();

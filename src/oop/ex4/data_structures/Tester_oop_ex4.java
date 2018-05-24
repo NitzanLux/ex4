@@ -446,15 +446,12 @@ public class Tester_oop_ex4 {
 			}
 			assertEquals(errMsg, hashSet.size(), tree.size());
 			if (testData.id==18 && move.data==5) {
-				System.out.println("fbolabolabola");
 			}
 		}
 		for (Move move : testData) {
 			if (hashSet2.contains(move.data)) continue;
 			if (testData.id==18 && move.data==5) {
-				System.out.println("fbolabolabola");
 			}
-			BTreePrinter.printNode(tree.root);
 			int deptt=tree.contains(move.data);
 			deptt=tree.contains(move.data);
 			errMsg = errMsgStart + "the depth of " + move.data + " should be " + move.depth + "...";
